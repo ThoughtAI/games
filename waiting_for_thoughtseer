@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Seer Oracle</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050505; /* Ultra Dark */
+            background-image: url('background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #E0E0E0;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Keen-inspired dark gradient overlay */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0, 30, 30, 0.95));
+            z-index: -1;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 300;
+            border-bottom: 1px solid #4DB6AC;
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 15px rgba(77, 182, 172, 0.6);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #B2DFDB; /* Light Mint */
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(5, 20, 15, 0.8); /* Dark Glass with Green tint */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(77, 182, 172, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            transition: all 0.5s ease;
+            margin-bottom: 20px;
+        }
+
+        /* PULSING TIMER */
+        .timer-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid #4DB6AC; /* Keen Teal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5em;
+            margin: 30px auto;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(77, 182, 172, 0.2);
+            animation: pulse-ring 2s infinite;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-card {
+            background: linear-gradient(90deg, rgba(10,30,25,0.9), rgba(20,40,35,0.9));
+            border: 1px solid #00695C; /* Darker Green */
+            color: #fff;
+            padding: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-card:hover {
+            background: linear-gradient(90deg, #004D40, #00695C);
+            border-color: #4DB6AC;
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(77, 182, 172, 0.4);
+        }
+
+        .arrow { font-size: 1.2em; color: #4DB6AC; }
+
+        .score-board {
+            font-size: 0.9rem;
+            color: #B2DFDB;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .reward-box {
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 25px;
+            border-top: 3px solid #4DB6AC;
+            border-bottom: 3px solid #4DB6AC;
+            margin-top: 20px;
+            animation: slideUp 1s ease-out;
+        }
+
+        /* Call To Action Box Styling */
+        .cta-box {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+
+        .cta-link {
+            color: #4DB6AC; /* Keen Teal */
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px dotted #4DB6AC;
+            transition: color 0.3s;
+        }
+
+        .cta-link:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+
+        .btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #fff;
+            color: #004D40; /* Dark Green Text on hover */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* LEGAL FOOTER STYLING */
+        .legal-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.65rem; /* Small, professional legal text */
+            color: #80CBC4; /* Muted Teal */
+            max-width: 500px;
+            opacity: 0.7;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .legal-footer strong {
+            color: #fff;
+            opacity: 1;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(77, 182, 172, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0); }
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeEffect { from { opacity: 0; } to { opacity: 1; } }
+
+        .hidden { display: none; }
+        .fade-in { animation: fadeEffect 0.8s; }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <h1>Thought Seer</h1>
+    <div class="subtitle">Intuitive Interface</div>
+
+    <div id="game-container" class="container">
+        
+        <div id="step-focus">
+            <p>TUNE INTO THEIR ENERGY.</p>
+            <div class="timer-circle">
+                <span id="timer-display">2</span>
+            </div>
+            <p style="font-size: 0.9em; opacity: 0.8;">HOLD THE VISUALIZATION...</p>
+        </div>
+
+        <div id="step-game" class="hidden fade-in">
+            <div class="score-board">VIBRATION LEVEL: <span id="score-val">0</span></div>
+            <p id="scenario-text" style="color:#fff; margin-bottom: 25px; font-weight: 300; line-height: 1.5;"></p>
+            <div id="options-area" class="options-grid">
+            </div>
+        </div>
+
+        <div id="step-result" class="hidden">
+            <h2 style="color: #B2DFDB; font-weight: 300; letter-spacing: 2px;">VISION RECEIVED</h2>
+            
+            <div class="reward-box">
+                <h3 id="reward-title" style="color: #4DB6AC; margin-top: 0;"></h3>
+                <p id="reward-text" style="line-height: 1.6; font-size: 1rem;"></p>
+            </div>
+
+            <div class="cta-box">
+                <p>Curious to know more? Or have feedback on this game? <br>
+                <a href="tel:18002755336" class="cta-link">Call me directly</a> to dive deeper.</p>
+                
+                <p style="margin-top: 15px; font-size: 0.85em; opacity: 0.9;">
+                    ✨ <strong>Tip:</strong> Consider donating to the charities I mentioned earlier for <em>double extra time and rewards</em> this week! ✨
+                </p>
+            </div>
+
+            <button class="btn" onclick="location.reload()">New Reading</button>
+        </div>
+
+    </div>
+
+    <div class="legal-footer">
+        <p>&copy; 2025 <strong>Thought Seer</strong>. All Rights Reserved.<br>
+        This interactive experience is the exclusive intellectual property of Thought Seer.</p>
+        
+        <p>All advisory services and readings are provided exclusively through the <strong>Keen</strong> platform for entertainment-based customer experiences and . <br>
+        Thought Seer strictly adheres to all <strong>Keen Member Policies</strong> to guarantee your complete privacy, confidentiality, and trust.</p>
+    </div>
+
+    <script>
+        let score = 0;
+        let level = 0;
+        const maxLevels = 3; 
+
+        const scenarios = [
+            {
+                text: "You feel a sudden shift in the atmosphere. How does it manifest?",
+                options: [
+                    { text: "A Locked Gate 🔒", type: "wait", points: 10 },
+                    { text: "A Flash of Lightning ⚡", type: "angry", points: 5 },
+                    { text: "An Unfolding Letter 📜", type: "meet", points: 20 }
+                ]
+            },
+            {
+                text: "The energy is trying to communicate a block. What do you see?",
+                options: [
+                    { text: "A Stone Wall 🧱", type: "angry", points: 5 },
+                    { text: "A Golden Key 🗝️", type: "meet", points: 20 },
+                    { text: "A Clock Stopping ⏳", type: "wait", points: 10 }
+                ]
+            },
+            {
+                text: "You reach the center of the vision. Who is waiting there?",
+                options: [
+                    { text: "A Reflection in a Mirror 🪞", type: "wait", points: 10 },
+                    { text: "They are Smiling 😊", type: "meet", points: 20 },
+                    { text: "A Shadow Walking Away 👤", type: "angry", points: 5 }
+                ]
+            }
+        ];
+
+        let timeLeft = 2;
+        const timerDisplay = document.getElementById('timer-display');
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerDisplay.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                startGame();
+            }
+        }, 1000);
+
+        function startGame() {
+            document.getElementById('step-focus').classList.add('hidden');
+            document.getElementById('step-game').classList.remove('hidden');
+            loadLevel();
+        }
+
+        function loadLevel() {
+            if (level >= maxLevels) {
+                showResult();
+                return;
+            }
+
+            const currentScenario = scenarios[level];
+            document.getElementById('scenario-text').innerText = currentScenario.text;
+            
+            const optionsArea = document.getElementById('options-area');
+            optionsArea.innerHTML = '';
+
+            const shuffledOptions = currentScenario.options.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-card';
+                btn.innerHTML = `<span>${opt.text}</span> <span class="arrow">›</span>`;
+                btn.onclick = () => makeChoice(opt.points);
+                optionsArea.appendChild(btn);
+            });
+        }
+
+        function makeChoice(points) {
+            score += points;
+            level++;
+            document.getElementById('game-container').style.opacity = '0';
+            setTimeout(() => {
+                loadLevel();
+                document.getElementById('game-container').style.opacity = '1';
+            }, 300);
+        }
+
+        function showResult() {
+            document.getElementById('step-game').classList.add('hidden');
+            document.getElementById('step-result').classList.remove('hidden');
+            
+            const rTitle = document.getElementById('reward-title');
+            const rText = document.getElementById('reward-text');
+
+            if (score >= 50) {
+                rTitle.innerText = "✨ THE GOLDEN REUNION";
+                rText.innerText = "The vision is clear and bright. The obstacles are melting away. Expect a significant, warm communication or meeting within 3 days.";
+            } else if (score >= 30) {
+                rTitle.innerText = "🔮 THE DIAMOND PATIENCE";
+                rText.innerText = "You are in a period of necessary growth. The outcome is positive, but timing is key. Do not force the door; let them come to you. A surprise awaits in 2 weeks.";
+            } else {
+                rTitle.innerText = "🔥 THE STORMY PASSION";
+                rText.innerText = "There is heat and friction here. This 'anger' is actually passion trying to find a way out. Clear the air, stand your ground, and the dynamic will shift dramatically.";
+            }
+        }
+    </script>
+
+</body>
+</html>
