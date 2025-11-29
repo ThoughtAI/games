@@ -10,6 +10,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #050505;
+            /* 👇 UPDATED: Back to JPG */
             background-image: url('background.jpg'); 
             background-size: cover;
             background-attachment: fixed;
@@ -27,7 +28,7 @@
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5); /* Slightly darker for readability */
             z-index: 0;
         }
 
@@ -46,13 +47,13 @@
         .subtitle {
             position: relative;
             z-index: 10;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-shadow: 1px 1px 2px black;
             font-size: 1.1rem;
             color: #F5F5F5;
         }
 
-        /* SCATTERED CONTAINER */
+        /* CALENDAR CONTAINER */
         .calendar-area {
             position: relative;
             z-index: 5;
@@ -66,7 +67,7 @@
             padding-bottom: 60px;
         }
 
-        /* STANDARD WINDOW STYLING */
+        /* WINDOW STYLING */
         .window-container {
             width: 90px;
             height: 90px;
@@ -77,17 +78,17 @@
             transition: transform 0.3s;
         }
 
-        /* SPECIAL DAY 24 STYLING (BIG & CENTER) */
+        /* SPECIAL DAY 24 STYLING */
         .window-container.day-24 {
             width: 180px;
             height: 180px;
-            z-index: 10; /* Make sure it sits above others if they overlap slightly */
-            order: 0; /* Flexbox order - we will manipulate this in JS */
+            z-index: 10;
+            order: 0; 
         }
         
         .window-container.day-24 .shutter {
-            background-color: #420505; /* Slightly darker red/purple for the grand finale */
-            border-color: #FFF; /* Platinum/White Gold border */
+            background-color: #420505; 
+            border-color: #FFF; 
             font-size: 3rem;
         }
 
@@ -108,7 +109,7 @@
             box-shadow: inset 0 0 10px #b8860b;
         }
 
-        /* SHUTTERS (Christmas Red Wood) */
+        /* SHUTTERS */
         .shutter {
             position: absolute;
             top: 0;
@@ -148,7 +149,6 @@
             filter: grayscale(0.5) brightness(0.7);
         }
 
-        /* OPEN ANIMATION */
         .window-container.opened .shutter.left { transform: rotateY(-140deg); }
         .window-container.opened .shutter.right { transform: rotateY(140deg); }
         
@@ -169,6 +169,7 @@
             opacity: 0;
             transition: opacity 0.3s;
             backdrop-filter: blur(5px);
+            cursor: pointer; /* Indicates you can click outside */
         }
 
         .modal-content {
@@ -182,8 +183,9 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
             transform: scale(0.8);
             transition: transform 0.3s;
-            max-height: 90vh; /* Prevent going off screen */
-            overflow-y: auto; /* Scroll if content is tall */
+            max-height: 90vh; 
+            overflow-y: auto; 
+            cursor: default; /* Stops click-through on the box itself */
         }
 
         .modal-day-title {
@@ -202,7 +204,6 @@
             margin-bottom: 30px;
         }
 
-        /* IMAGE STYLING INSIDE MODAL */
         .daily-image {
             max-width: 100%;
             height: auto;
@@ -295,37 +296,35 @@
     </div>
 
     <script>
-        // --- ⚙️ CONFIGURATION ---
-        const TEST_MODE = true; // Change to 'false' to lock doors by date
+        const TEST_MODE = true; 
 
         const messages = {
-            1: "A quiet start leads to a loud victory.",
-            2: "Watch for the color blue today.",
-            3: "Patience is your strongest weapon.",
-            4: "An unexpected message brings clarity.",
-            5: "You are being protected from unseen negativity.",
-            6: "A small financial win is coming.",
-            7: "Dream big tonight; your intuition is high.",
-            8: "Clear the clutter to clear your mind.",
-            9: "Someone from the past is thinking of you.",
-            10: "Double numbers (11:11) are a sign.",
-            11: "Step into your power; speak your truth.",
-            12: "Nature heals. Take a walk.",
-            13: "Lucky day! Take a chance.",
-            14: "You are stronger than you think.",
-            15: "Halfway mark. Breathe deeply.",
-            16: "The Diamond Pattern is active.",
-            17: "A secret revealed works in your favor.",
-            18: "Stand your ground with elegance.",
-            19: "Beauty surrounds you today.",
-            20: "The 20-point check day.",
-            21: "Winter Solstice. Light a candle.",
-            22: "A new path opens up.",
-            23: "Expect a sweet treat.",
-            24: "Peace and Joy are yours."
+            1: "Dec 1: A quiet start leads to a loud victory.",
+            2: "Dec 2: Watch for the color blue today.",
+            3: "Dec 3: Patience is your strongest weapon.",
+            4: "Dec 4: An unexpected message brings clarity.",
+            5: "Dec 5: You are being protected from unseen negativity.",
+            6: "Dec 6: A small financial win is coming.",
+            7: "Dec 7: Dream big tonight; your intuition is high.",
+            8: "Dec 8: Clear the clutter to clear your mind.",
+            9: "Dec 9: Someone from the past is thinking of you.",
+            10: "Dec 10: Double numbers (11:11) are a sign.",
+            11: "Dec 11: Step into your power; speak your truth.",
+            12: "Dec 12: Nature heals. Take a walk.",
+            13: "Dec 13: Lucky day! Take a chance.",
+            14: "Dec 14: You are stronger than you think.",
+            15: "Dec 15: Halfway mark. Breathe deeply.",
+            16: "Dec 16: The Diamond Pattern is active.",
+            17: "Dec 17: A secret revealed works in your favor.",
+            18: "Dec 18: Stand your ground with elegance.",
+            19: "Dec 19: Beauty surrounds you today.",
+            20: "Dec 20: The 20-point check day.",
+            21: "Dec 21: Winter Solstice. Light a candle.",
+            22: "Dec 22: A new path opens up.",
+            23: "Dec 23: Expect a sweet treat.",
+            24: "Dec 24: Peace and Joy are yours."
         };
 
-        // --- SNOW ENGINE ---
         function createSnowflake() {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
@@ -339,21 +338,14 @@
         }
         setInterval(createSnowflake, 50);
 
-        // --- RANDOMIZER LOGIC ---
-        // Create array 1-23
+        // RANDOMIZER
         let days = Array.from({length: 23}, (_, i) => i + 1);
-        
-        // Shuffle 1-23
         for (let i = days.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [days[i], days[j]] = [days[j], days[i]];
         }
-        
-        // Insert 24 into the middle (approximate center)
-        // The array has 23 items. Middle is index 11 or 12.
         days.splice(11, 0, 24);
 
-        // --- BUILD CALENDAR ---
         const calendar = document.getElementById('calendar');
         const modal = document.getElementById('modal');
         const modalDay = document.getElementById('modalDay');
@@ -366,24 +358,19 @@
             container.className = 'window-container';
             if (day === 24) container.classList.add('day-24');
 
-            // Randomize layout slightly
             const randomMargin = Math.floor(Math.random() * 20);
             container.style.margin = `${randomMargin}px`;
 
-            // Inner Content
             const content = document.createElement('div');
             content.className = 'window-content';
-            
-            // If you want the number INSIDE too, keep this:
             content.innerText = day;
 
-            // Shutters
             const shutterLeft = document.createElement('div');
             shutterLeft.className = 'shutter left';
             
             const shutterRight = document.createElement('div');
             shutterRight.className = 'shutter right';
-            shutterRight.innerText = day; // Number displayed on shutter
+            shutterRight.innerText = day; 
 
             container.appendChild(content);
             container.appendChild(shutterLeft);
@@ -393,17 +380,17 @@
                 container.classList.add('opened');
             }
 
-            // Click Event
+            if (!isDateAllowed(day)) {
+                container.classList.add('locked');
+            }
+
             container.onclick = () => {
                 if (!isDateAllowed(day)) {
                     alert("This window is sealed until Dec " + day + "!");
                 } else {
                     container.classList.add('opened');
                     localStorage.setItem('advent_door_' + day, 'true');
-                    
-                    setTimeout(() => {
-                        openModal(day);
-                    }, 800);
+                    setTimeout(() => { openModal(day); }, 800);
                 }
             };
 
@@ -422,9 +409,10 @@
         function openModal(day) {
             modalDay.innerText = "December " + day;
             
-            // AUTOMATICALLY ADDS THE IMAGE HERE
-            // It looks for '1.jpg', '2.jpg' etc.
-            const imgHTML = `<img src="${day}.jpg" class="daily-image" alt="Day ${day} Vision">`;
+            // IMAGE LOADING LOGIC
+            // The onerror='this.style.display="none"' part hides the image box 
+            // completely if you haven't uploaded 1.jpg yet.
+            const imgHTML = `<img src="${day}.jpg" class="daily-image" alt="Day ${day} Vision" onerror="this.style.display='none'">`;
             const textContent = messages[day] || "Insight coming soon...";
             
             modalMsg.innerHTML = imgHTML + "<br>" + textContent;
@@ -433,6 +421,13 @@
 
         function closeModal() {
             modal.classList.remove('show');
+        }
+
+        // CLICK OUTSIDE TO CLOSE
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
         }
     </script>
 </body>
