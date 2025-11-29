@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Seer Advent</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050505;
+            /* Use your same background image if you like, or a festive one */
+            background-image: url('background.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0, 20, 20, 0.9));
+            z-index: -1;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 1px solid #4DB6AC;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(77, 182, 172, 0.6);
+            text-align: center;
+        }
+
+        /* GRID LAYOUT */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .door {
+            aspect-ratio: 1 / 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #4DB6AC;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4DB6AC;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        /* LOCKED STATE */
+        .door.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #555;
+            color: #777;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .door.locked::after {
+            content: "🔒";
+            font-size: 0.8em;
+            position: absolute;
+            bottom: 5px;
+        }
+
+        /* OPEN STATE */
+        .door.opened {
+            background: rgba(77, 182, 172, 0.2);
+            border-color: #FFD700;
+            color: #FFD700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .door:hover:not(.locked) {
+            transform: scale(1.05);
+            background: rgba(77, 182, 172, 0.3);
+            box-shadow: 0 0 10px #4DB6AC;
+        }
+
+        /* POPUP MESSAGE STYLES */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 2px solid #4DB6AC;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(77, 182, 172, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal-day-title {
+            color: #4DB6AC;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #4DB6AC;
+            border: 1px solid #4DB6AC;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #4DB6AC;
+            color: #000;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            font-size: 0.7rem;
+            color: #888;
+            text-align: center;
+        }
+
+        /* Show modal animation */
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <h1>✨ 24 Days of Vision ✨</h1>
+    <p style="font-size: 0.9rem; margin-bottom: 20px;">Unlock a daily insight from your Thought Seer.</p>
+
+    <div class="calendar-grid" id="calendar">
+        </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-day-title" id="modalDay"></div>
+            <div class="modal-message" id="modalMsg"></div>
+            <button class="close-btn" onclick="closeModal()">Received ✨</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Thought Seer. <br>
+        <a href="tel:18002755336" style="color:#4DB6AC; text-decoration:none;">Call for a Personal Reading</a>
+    </div>
+
+    <script>
+        // --- ⚙️ CONFIGURATION SETTINGS ---
+        
+        // SET THIS TO 'true' TO TEST ALL DOORS NOW. 
+        // SET TO 'false' BEFORE SENDING TO CLIENTS (so they have to wait for the dates).
+        const TEST_MODE = true; 
+
+        // YOUR CONTENT GOES HERE!
+        // You can put text, emojis, or even HTML like <br> for line breaks.
+        const messages = {
+            1: "Dec 1: The energy shifts today. Keep your eyes open for the number 11.",
+            2: "Dec 2: Someone is thinking of you fondly. A soft color brings luck.",
+            3: "Dec 3: Patience is your superpower today. Don't rush the process.",
+            4: "Dec 4: A message comes from an unexpected source. Listen closely.",
+            5: "Dec 5: Treat yourself gently. Your vibration is raising.",
+            6: "Dec 6: Look for the small victories. They are adding up.",
+            7: "Dec 7: A day for clarity. Write down your dreams tonight.",
+            8: "Dec 8: The path clears. A blockage is removed.",
+            9: "Dec 9: Trust your gut feeling about that quiet person.",
+            10: "Dec 10: Double numbers appear. You are aligned.",
+            11: "Dec 11: A portal day. Make a big wish.",
+            12: "Dec 12: Connect with nature, even if just for a moment.",
+            13: "Dec 13: Luck is on your side. Wear something shiny.",
+            14: "Dec 14: You are being protected from something unseen.",
+            15: "Dec 15: Halfway there. Reflect on how far you've come.",
+            16: "Dec 16: Remember the Diamond Pattern? It's active today.",
+            17: "Dec 17: A secret is revealed, but it benefits you.",
+            18: "Dec 18: Strength is quiet today. Stand your ground.",
+            19: "Dec 19: Someone admires your elegance from afar.",
+            20: "Dec 20: The 20-point check. Look back 20 weeks.",
+            21: "Dec 21: Solstice energy. Light a candle.",
+            22: "Dec 22: Two paths diverge. Choose the one that feels lighter.",
+            23: "Dec 23: Expect a sweet surprise or a 'creamy treat'.",
+            24: "Dec 24: You are ready for the new year. Peace is yours."
+        };
+
+        // --- ⚙️ END CONFIGURATION ---
+
+        const calendar = document.getElementById('calendar');
+        const modal = document.getElementById('modal');
+        const modalDay = document.getElementById('modalDay');
+        const modalMsg = document.getElementById('modalMsg');
+        
+        // Use 2025 as per your previous context, or current year
+        const currentYear = 2025; 
+        const currentMonth = 11; // 11 = December in JS (0-indexed)
+
+        // Generate 24 Doors
+        for (let i = 1; i <= 24; i++) {
+            const door = document.createElement('div');
+            door.className = 'door';
+            door.innerText = i;
+            door.onclick = () => openDoor(i, door);
+            
+            // Check if already opened in local storage
+            if (localStorage.getItem('advent_door_' + i)) {
+                door.classList.add('opened');
+            }
+
+            // Check if locked based on date
+            if (!isDateAllowed(i)) {
+                door.classList.add('locked');
+            }
+
+            calendar.appendChild(door);
+        }
+
+        function isDateAllowed(day) {
+            if (TEST_MODE) return true;
+            
+            const now = new Date();
+            // Check if we are in Dec of the correct year, and if today is >= the door day
+            // Note: In testing, you might need to adjust this logic if simulating future dates.
+            // Simple check: Is today's date >= the door number? (Assuming we are in Dec)
+            
+            // Strict check:
+            // return now.getFullYear() === currentYear && now.getMonth() === currentMonth && now.getDate() >= day;
+            
+            // For now, let's just assume if it's Dec 2025
+            if (now.getFullYear() === 2025 && now.getMonth() === 11) {
+                return now.getDate() >= day;
+            }
+            return false; // Lock everything if not Dec 2025
+        }
+
+        function openDoor(day, element) {
+            if (!isDateAllowed(day)) {
+                alert("This door is locked until December " + day + "!");
+                return;
+            }
+
+            // Mark visually as opened
+            element.classList.add('opened');
+            // Save to memory
+            localStorage.setItem('advent_door_' + day, 'true');
+
+            // Show Content
+            modalDay.innerText = "December " + day;
+            modalMsg.innerHTML = messages[day] || "The mists are swirling... content coming soon.";
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+
+    </script>
+</body>
+</html>
