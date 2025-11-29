@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Seer Advent</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050505;
+            /* ------------------------------------------------------ */
+            /* 👇 IMPORTANT: MAKE SURE YOUR GIF IS NAMED 'background.gif' */
+            background-image: url('background.gif'); 
+            /* ------------------------------------------------------ */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #FFF;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent side scroll from snow */
+        }
+
+        /* Dark overlay to ensure text is readable over the GIF */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Adjust opacity if needed */
+            z-index: 0;
+        }
+
+        h1 {
+            position: relative;
+            z-index: 2;
+            color: #FFD700; /* Gold */
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 1px solid #FFD700;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 2px 2px 4px #000;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        p.subtitle {
+            position: relative;
+            z-index: 2;
+            font-size: 1rem; 
+            margin-bottom: 10px; 
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* GRID LAYOUT */
+        .calendar-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .door {
+            aspect-ratio: 1 / 1;
+            background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+            border: 1px solid #FFD700;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+        }
+
+        /* LOCKED STATE */
+        .door.locked {
+            opacity: 0.7;
+            cursor: not-allowed;
+            border-color: #888;
+            color: #aaa;
+            background: rgba(30, 30, 30, 0.85);
+        }
+        
+        .door.locked::after {
+            content: "🔒";
+            font-size: 0.6em;
+            position: absolute;
+            bottom: 5px;
+            opacity: 0.7;
+        }
+
+        /* OPEN STATE */
+        .door.opened {
+            background: rgba(255, 215, 0, 0.3); /* Gold tint */
+            border-color: #FFF;
+            color: #FFF;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .door:hover:not(.locked) {
+            transform: scale(1.05);
+            background: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 20px #FFD700;
+        }
+
+        /* POPUP MESSAGE STYLES */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 100; /* Above the snow */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal-day-title {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #FFD700;
+            color: #000;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 2;
+            margin-top: auto;
+            font-size: 0.7rem;
+            color: #ccc;
+            text-align: center;
+            padding-bottom: 20px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* SNOWFLAKE STYLING */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #FFF;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #fff;
+            user-select: none;
+            pointer-events: none; /* Click through the snow */
+            z-index: 1; /* Between background and content */
+            animation-name: fall;
+            animation-timing-function: linear;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-overlay.show .modal-content { transform: scale(1); }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <h1>✨ 24 Days of Vision ✨</h1>
+    <p class="subtitle">Your Daily Insight from Thought Seer</p>
+
+    <div class="calendar-grid" id="calendar"></div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-day-title" id="modalDay"></div>
+            <div class="modal-message" id="modalMsg"></div>
+            <button class="close-btn" onclick="closeModal()">Received ✨</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Thought Seer. <br>
+        Services provided via Keen.
+    </div>
+
+    <script>
+        // --- ⚙️ CONFIGURATION ---
+        const TEST_MODE = true; // Set to 'false' before sending to clients!
+
+        const messages = {
+            1: "Dec 1: A quiet start leads to a loud victory.",
+            2: "Dec 2: Watch for the color blue today.",
+            3: "Dec 3: Patience is your strongest weapon.",
+            4: "Dec 4: An unexpected message brings clarity.",
+            5: "Dec 5: You are being protected from unseen negativity.",
+            6: "Dec 6: A small financial win is coming.",
+            7: "Dec 7: Dream big tonight; your intuition is high.",
+            8: "Dec 8: Clear the clutter to clear your mind.",
+            9: "Dec 9: Someone from the past is thinking of you.",
+            10: "Dec 10: Double numbers (11:11) are a sign.",
+            11: "Dec 11: Step into your power; speak your truth.",
+            12: "Dec 12: Nature heals. Take a walk.",
+            13: "Dec 13: Lucky day! Take a chance.",
+            14: "Dec 14: You are stronger than you think.",
+            15: "Dec 15: Halfway mark. Breathe deeply.",
+            16: "Dec 16: The Diamond Pattern is active.",
+            17: "Dec 17: A secret revealed works in your favor.",
+            18: "Dec 18: Stand your ground with elegance.",
+            19: "Dec 19: Beauty surrounds you today.",
+            20: "Dec 20: The 20-point check day.",
+            21: "Dec 21: Winter Solstice. Light a candle.",
+            22: "Dec 22: A new path opens up.",
+            23: "Dec 23: Expect a sweet treat.",
+            24: "Dec 24: Peace and Joy are yours."
+        };
+
+        // --- SNOWFLAKE ENGINE ---
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerText = '❄'; // You can change this to '•' for round snow
+            
+            // Random Positioning
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            
+            // Random Animation Duration (Speed)
+            const duration = Math.random() * 5 + 3; // Between 3 and 8 seconds
+            snowflake.style.animationDuration = duration + 's';
+            
+            // Random Size
+            const size = Math.random() * 10 + 10 + 'px';
+            snowflake.style.fontSize = size;
+            
+            // Random Opacity
+            snowflake.style.opacity = Math.random();
+
+            document.body.appendChild(snowflake);
+
+            // Remove snowflake after it falls to keep browser clean
+            setTimeout(() => {
+                snowflake.remove();
+            }, duration * 1000);
+        }
+
+        // Create a new snowflake every 100ms
+        setInterval(createSnowflake, 100);
+
+        // --- CALENDAR LOGIC ---
+        const calendar = document.getElementById('calendar');
+        const modal = document.getElementById('modal');
+        const modalDay = document.getElementById('modalDay');
+        const modalMsg = document.getElementById('modalMsg');
+        const currentYear = 2025; 
+        const currentMonth = 11; 
+
+        for (let i = 1; i <= 24; i++) {
+            const door = document.createElement('div');
+            door.className = 'door';
+            door.innerText = i;
+            door.onclick = () => openDoor(i, door);
+            
+            if (localStorage.getItem('advent_door_' + i)) {
+                door.classList.add('opened');
+            }
+            if (!isDateAllowed(i)) {
+                door.classList.add('locked');
+            }
+            calendar.appendChild(door);
+        }
+
+        function isDateAllowed(day) {
+            if (TEST_MODE) return true;
+            const now = new Date();
+            if (now.getFullYear() === 2025 && now.getMonth() === 11) {
+                return now.getDate() >= day;
+            }
+            return false; 
+        }
+
+        function openDoor(day, element) {
+            if (!isDateAllowed(day)) {
+                alert("Locked until Dec " + day + "!");
+                return;
+            }
+            element.classList.add('opened');
+            localStorage.setItem('advent_door_' + day, 'true');
+            modalDay.innerText = "December " + day;
+            modalMsg.innerHTML = messages[day] || "Insight coming soon...";
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+    </script>
+</body>
+</html>
