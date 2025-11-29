@@ -5,125 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thought Seer Advent</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;600&display=swap');
 
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #050505;
-            /* 👇 THIS LOOKS FOR YOUR RENAMED IMAGE */
-            background-image: url('background.png');
+            /* Make sure your compressed GIF is named background.gif */
+            background-image: url('background.gif'); 
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
             color: #FFF;
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* Dark overlay so the white text is readable against the painting */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* 50% darkness */
+            background: rgba(0, 0, 0, 0.3); /* Lighter overlay to see the GIF */
             z-index: 0;
         }
 
         h1 {
             position: relative;
-            z-index: 2;
-            color: #FFD700; /* Gold to match the frame */
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border-bottom: 1px solid #FFD700;
-            padding-bottom: 10px;
-            text-shadow: 2px 2px 4px #000;
+            z-index: 10;
+            font-family: 'Cinzel', serif;
+            color: #FFD700;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px #000, 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 5px;
             text-align: center;
-            margin-top: 40px;
         }
 
-        p.subtitle {
+        .subtitle {
             position: relative;
-            z-index: 2;
-            font-size: 1rem; 
-            margin-bottom: 10px; 
+            z-index: 10;
+            margin-bottom: 40px;
             text-shadow: 1px 1px 2px black;
-            color: #EEE;
+            font-size: 1rem;
         }
 
-        /* GRID LAYOUT */
-        .calendar-grid {
+        /* SCATTERED CONTAINER */
+        .calendar-area {
             position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 15px;
+            z-index: 5;
             width: 100%;
-            max-width: 800px;
-            margin-top: 30px;
+            max-width: 1000px;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            gap: 20px;
             padding-bottom: 60px;
         }
 
-        .door {
-            aspect-ratio: 1 / 1;
-            background: rgba(20, 20, 20, 0.85); /* Dark boxes */
-            border: 1px solid #FFD700; /* Gold border */
-            border-radius: 8px;
+        /* THE WINDOW CONTAINER */
+        .window-container {
+            width: 90px;
+            height: 90px;
+            perspective: 800px; /* Gives the 3D opening effect */
+            position: relative;
+            cursor: pointer;
+            /* Margins will be randomized by JS */
+        }
+
+        /* THE CONTENT INSIDE (HIDDEN BEHIND SHUTTERS) */
+        .window-content {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #FFD700 0%, #b8860b 100%);
+            border-radius: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Cinzel', serif;
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #FFD700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            backdrop-filter: blur(2px);
+            color: #3e2723;
+            box-shadow: 0 0 15px #FFD700;
+            position: absolute;
+            top: 0; left: 0;
         }
 
-        /* LOCKED STATE */
-        .door.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-            border-color: #888;
-            color: #aaa;
-            background: rgba(40, 40, 40, 0.8);
+        /* THE SHUTTERS */
+        .shutter {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: #3e2723; /* Dark Wood */
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 4px);
+            border: 2px solid #1a0f0d;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d7ccc8;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-sizing: border-box;
         }
-        
-        .door.locked::after {
-            content: "🔒";
-            font-size: 0.6em;
+
+        .shutter.left {
+            left: 0;
+            transform-origin: left;
+            border-radius: 5px 0 0 5px;
+            border-right: 1px solid #1a0f0d;
+        }
+
+        .shutter.right {
+            right: 0;
+            transform-origin: right;
+            border-radius: 0 5px 5px 0;
+            border-left: 1px solid #1a0f0d;
+        }
+
+        /* LOCK ICON */
+        .lock-icon {
+            font-size: 0.8rem;
+            opacity: 0.5;
             position: absolute;
             bottom: 5px;
-            opacity: 0.7;
         }
 
-        /* OPEN STATE */
-        .door.opened {
-            background: rgba(255, 215, 0, 0.3); /* Gold glow */
-            border-color: #FFF;
-            color: #FFF;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        /* OPEN ANIMATION */
+        .window-container.opened .shutter.left {
+            transform: rotateY(-110deg);
+        }
+        .window-container.opened .shutter.right {
+            transform: rotateY(110deg);
+        }
+        .window-container.opened .window-content {
+            animation: glow 1.5s infinite alternate;
         }
 
-        .door:hover:not(.locked) {
-            transform: scale(1.05);
-            background: rgba(255, 215, 0, 0.4);
-            box-shadow: 0 0 20px #FFD700;
+        /* HOVER EFFECT */
+        .window-container:hover .shutter {
+            background-color: #4e342e; /* Lighter wood on hover */
         }
 
-        /* POPUP MESSAGE STYLES */
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #FFD700; }
+            to { box-shadow: 0 0 20px #FFD700, 0 0 10px orange; }
+        }
+
+        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             justify-content: center;
             align-items: center;
             z-index: 100;
@@ -132,7 +170,7 @@
         }
 
         .modal-content {
-            background: #111;
+            background: #1a1a1a;
             border: 2px solid #FFD700;
             border-radius: 15px;
             padding: 30px;
@@ -146,10 +184,9 @@
 
         .modal-day-title {
             color: #FFD700;
-            font-size: 1.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
             margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         .modal-message {
@@ -171,14 +208,13 @@
             transition: 0.3s;
         }
 
-        .close-btn:hover {
-            background: #FFD700;
-            color: #000;
-        }
+        .close-btn:hover { background: #FFD700; color: #000; }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-overlay.show .modal-content { transform: scale(1); }
 
         .footer {
             position: relative;
-            z-index: 2;
+            z-index: 10;
             margin-top: auto;
             font-size: 0.7rem;
             color: #ccc;
@@ -187,13 +223,7 @@
             text-shadow: 1px 1px 2px black;
         }
 
-        .legal-text {
-            margin-top: 5px;
-            font-size: 0.6rem;
-            opacity: 0.7;
-        }
-
-        /* SNOWFLAKE STYLING */
+        /* SNOWFLAKE ENGINE */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -203,18 +233,12 @@
             text-shadow: 0 0 5px #fff;
             user-select: none;
             pointer-events: none;
-            z-index: 1; 
+            z-index: 1;
             animation-name: fall;
             animation-timing-function: linear;
             opacity: 0.8;
         }
-
-        @keyframes fall {
-            to { transform: translateY(110vh); }
-        }
-
-        .modal-overlay.show { display: flex; opacity: 1; }
-        .modal-overlay.show .modal-content { transform: scale(1); }
+        @keyframes fall { to { transform: translateY(110vh); } }
 
     </style>
 </head>
@@ -225,7 +249,7 @@
     <h1>✨ 24 Days of Vision ✨</h1>
     <p class="subtitle">Your Daily Insight from Thought Seer</p>
 
-    <div class="calendar-grid" id="calendar"></div>
+    <div class="calendar-area" id="calendar"></div>
 
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
@@ -237,15 +261,12 @@
 
     <div class="footer">
         &copy; 2025 Thought Seer. <br>
-        <a href="tel:18002755336" style="color:#FFD700; text-decoration:none; font-weight:bold;">Call for a Personal Reading</a>
-        <div class="legal-text">
-            This experience is client-side. No cookies or personal data collected.
-        </div>
+        Services provided via Keen. <br>
+        Client-side experience. No personal data collected.
     </div>
 
     <script>
-        // --- ⚙️ CONFIGURATION ---
-        const TEST_MODE = true; // Change to 'false' when you are ready to launch!
+        const TEST_MODE = true; // Change to false to lock doors!
 
         const messages = {
             1: "Dec 1: A quiet start leads to a loud victory.",
@@ -274,42 +295,81 @@
             24: "Dec 24: Peace and Joy are yours."
         };
 
-        // --- SNOWFLAKE ENGINE ---
+        // SNOW
         function createSnowflake() {
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake');
             snowflake.innerText = '❄';
             snowflake.style.left = Math.random() * 100 + 'vw';
-            const duration = Math.random() * 5 + 3; 
-            snowflake.style.animationDuration = duration + 's';
-            const size = Math.random() * 10 + 10 + 'px';
-            snowflake.style.fontSize = size;
+            snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
             snowflake.style.opacity = Math.random();
             document.body.appendChild(snowflake);
-            setTimeout(() => { snowflake.remove(); }, duration * 1000);
+            setTimeout(() => { snowflake.remove(); }, 8000);
         }
         setInterval(createSnowflake, 100);
 
-        // --- CALENDAR LOGIC ---
+        // CALENDAR LOGIC
         const calendar = document.getElementById('calendar');
         const modal = document.getElementById('modal');
         const modalDay = document.getElementById('modalDay');
         const modalMsg = document.getElementById('modalMsg');
-        const currentYear = 2025; 
-        const currentMonth = 11; 
 
         for (let i = 1; i <= 24; i++) {
-            const door = document.createElement('div');
-            door.className = 'door';
-            door.innerText = i;
-            door.onclick = () => openDoor(i, door);
+            const container = document.createElement('div');
+            container.className = 'window-container';
+
+            // Randomize layout slightly (Scatter effect)
+            const randomMarginTop = Math.floor(Math.random() * 30);
+            const randomMarginLeft = Math.floor(Math.random() * 20);
+            container.style.marginTop = randomMarginTop + "px";
+            container.style.marginLeft = randomMarginLeft + "px";
+            container.style.marginRight = randomMarginLeft + "px";
+
+            // Inner Content (The Number revealed)
+            const content = document.createElement('div');
+            content.className = 'window-content';
+            content.innerText = i;
+
+            // Left Shutter
+            const shutterLeft = document.createElement('div');
+            shutterLeft.className = 'shutter left';
+            // Only show number on shutter if it's locked or closed, actually keeping it mostly blank wood is nicer
+            // let's put the number on the shutter too
+            shutterLeft.innerText = ""; 
+
+            // Right Shutter
+            const shutterRight = document.createElement('div');
+            shutterRight.className = 'shutter right';
+            shutterRight.innerText = i; // Number on the right shutter
+
+            // Assemble
+            container.appendChild(content);
+            container.appendChild(shutterLeft);
+            container.appendChild(shutterRight);
+
+            // Check if opened
             if (localStorage.getItem('advent_door_' + i)) {
-                door.classList.add('opened');
+                container.classList.add('opened');
             }
-            if (!isDateAllowed(i)) {
-                door.classList.add('locked');
-            }
-            calendar.appendChild(door);
+
+            // Click Event
+            container.onclick = () => {
+                if (!isDateAllowed(i)) {
+                    // Wiggle effect for locked?
+                    alert("Locked until Dec " + i);
+                } else {
+                    container.classList.add('opened');
+                    localStorage.setItem('advent_door_' + i, 'true');
+                    
+                    // Delay showing the message so they see the shutter open animation first
+                    setTimeout(() => {
+                        openModal(i);
+                    }, 800); 
+                }
+            };
+
+            calendar.appendChild(container);
         }
 
         function isDateAllowed(day) {
@@ -318,16 +378,10 @@
             if (now.getFullYear() === 2025 && now.getMonth() === 11) {
                 return now.getDate() >= day;
             }
-            return false; 
+            return false;
         }
 
-        function openDoor(day, element) {
-            if (!isDateAllowed(day)) {
-                alert("Locked until Dec " + day + "!");
-                return;
-            }
-            element.classList.add('opened');
-            localStorage.setItem('advent_door_' + day, 'true');
+        function openModal(day) {
             modalDay.innerText = "December " + day;
             modalMsg.innerHTML = messages[day] || "Insight coming soon...";
             modal.classList.add('show');
