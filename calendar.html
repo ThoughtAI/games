@@ -103,7 +103,7 @@
 
         .title {
             font-family: 'Cinzel', serif;
-            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
             font-weight: 700;
             color: #ffffff;
             text-shadow: 
@@ -111,7 +111,7 @@
                 0 0 30px rgba(74, 144, 120, 0.4),
                 2px 2px 4px rgba(0, 0, 0, 0.8);
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .title::before, .title::after {
@@ -120,64 +120,69 @@
         }
 
         .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             color: #b8d4c8;
             font-style: italic;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
             letter-spacing: 2px;
         }
 
-        /* CALENDAR GRID */
-        .calendar-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            max-width: 1200px;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            min-height: 600px;
+        /* CALENDAR GRID - Circular Layout */
+        .calendar-container {
             position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 900px;
+            margin: 0 auto;
+        }
+
+        .calendar-grid {
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
 
         /* WINDOW CARD */
         .window-card {
-            position: relative;
-            width: 120px;
-            height: 120px;
+            position: absolute;
+            width: 100px;
+            height: 100px;
             cursor: pointer;
-            transition: transform 0.4s ease, filter 0.3s ease;
+            transition: filter 0.3s ease;
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
             /* White neon glow behind windows */
             background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
             padding: 8px;
             border-radius: 12px;
+            /* Positioned via JavaScript */
         }
 
-        /* Drifting animation for regular windows */
+        /* Drifting animation for regular windows - orbiting effect */
         .window-card.drifting {
-            animation: drift var(--drift-duration, 20s) ease-in-out infinite;
+            animation: orbitDrift var(--drift-duration, 60s) ease-in-out infinite;
             animation-delay: var(--drift-delay, 0s);
         }
 
-        @keyframes drift {
+        @keyframes orbitDrift {
             0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
+                transform: translate(0, 0) rotate(0deg) scale(1);
             }
             25% {
-                transform: translate(var(--drift-x1, 10px), var(--drift-y1, -8px)) rotate(1deg);
+                transform: translate(var(--drift-x1, 15px), var(--drift-y1, -10px)) rotate(2deg) scale(1.02);
             }
             50% {
-                transform: translate(var(--drift-x2, -8px), var(--drift-y2, 12px)) rotate(-1deg);
+                transform: translate(var(--drift-x2, -10px), var(--drift-y2, 15px)) rotate(-2deg) scale(0.98);
             }
             75% {
-                transform: translate(var(--drift-x3, 12px), var(--drift-y3, 5px)) rotate(0.5deg);
+                transform: translate(var(--drift-x3, 12px), var(--drift-y3, 8px)) rotate(1deg) scale(1.01);
             }
         }
 
         .window-card.drifting:hover {
             animation-play-state: paused;
+            transform: scale(1.1) !important;
+            z-index: 100;
+        }
         }
 
         .window-card:hover:not(.locked) {
@@ -297,9 +302,9 @@
             color: #1a3d2e;
             font-family: 'Cinzel', serif;
             font-weight: 700;
-            font-size: 1.1rem;
-            width: 32px;
-            height: 32px;
+            font-size: 1.3rem;
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -379,58 +384,78 @@
         }
 
         /* SPECIAL DAY 24 - Centered with Wreath */
-        .day-24-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 0;
-            order: -1; /* Always first/top */
+        .window-card.day-24 {
+            width: 180px;
+            height: 180px;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 50;
+            /* No drifting for day 24 */
+            animation: day24Glow 4s ease-in-out infinite !important;
         }
 
-        .window-card.day-24 {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            /* No drifting for day 24 */
-            animation: none !important;
-            transform: none !important;
+        @keyframes day24Glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 40px rgba(74, 144, 120, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 60px rgba(74, 144, 120, 0.5));
+            }
         }
 
         /* Christmas Wreath Border */
         .window-card.day-24::before {
             content: '';
             position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
+            top: -25px;
+            left: -25px;
+            right: -25px;
+            bottom: -25px;
             border-radius: 50%;
             background: 
-                radial-gradient(ellipse at center, transparent 60%, rgba(34, 80, 50, 0.8) 65%, rgba(50, 120, 70, 0.9) 70%, rgba(34, 80, 50, 0.8) 75%, transparent 80%);
+                conic-gradient(
+                    from 0deg,
+                    rgba(34, 100, 50, 0.9) 0deg,
+                    rgba(50, 140, 70, 0.8) 30deg,
+                    rgba(34, 100, 50, 0.9) 60deg,
+                    rgba(50, 140, 70, 0.8) 90deg,
+                    rgba(34, 100, 50, 0.9) 120deg,
+                    rgba(50, 140, 70, 0.8) 150deg,
+                    rgba(34, 100, 50, 0.9) 180deg,
+                    rgba(50, 140, 70, 0.8) 210deg,
+                    rgba(34, 100, 50, 0.9) 240deg,
+                    rgba(50, 140, 70, 0.8) 270deg,
+                    rgba(34, 100, 50, 0.9) 300deg,
+                    rgba(50, 140, 70, 0.8) 330deg,
+                    rgba(34, 100, 50, 0.9) 360deg
+                );
+            -webkit-mask: radial-gradient(transparent 65%, black 67%, black 85%, transparent 87%);
+            mask: radial-gradient(transparent 65%, black 67%, black 85%, transparent 87%);
             z-index: -1;
-            animation: wreathGlow 3s ease-in-out infinite;
+            animation: wreathSpin 120s linear infinite;
         }
 
-        /* Wreath decorations - berries */
+        @keyframes wreathSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Wreath decorations - berries and bow */
         .window-card.day-24::after {
-            content: '🎄✨🎁✨🎄';
+            content: '🎀';
             position: absolute;
-            bottom: -35px;
+            top: -35px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.2rem;
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 100, 100, 0.8);
+            animation: bowBounce 2s ease-in-out infinite;
         }
 
-        @keyframes wreathGlow {
-            0%, 100% {
-                filter: drop-shadow(0 0 10px rgba(50, 150, 80, 0.5)) drop-shadow(0 0 20px rgba(255, 50, 50, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 0 20px rgba(50, 150, 80, 0.8)) drop-shadow(0 0 30px rgba(255, 50, 50, 0.5));
-            }
+        @keyframes bowBounce {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
         }
 
         .window-card.day-24 .day-number {
@@ -507,7 +532,7 @@
 
         .modal-day {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #ffffff;
             margin-bottom: 25px;
             text-shadow: 0 0 20px rgba(74, 144, 120, 0.5);
@@ -523,7 +548,7 @@
         }
 
         .modal-message {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             line-height: 1.8;
             color: #d4e8de;
             margin-bottom: 30px;
@@ -544,10 +569,10 @@
             background: transparent;
             border: 2px solid #4a9078;
             color: #ffffff;
-            padding: 15px 40px;
+            padding: 18px 50px;
             border-radius: 30px;
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -558,6 +583,120 @@
             background: #4a9078;
             color: #ffffff;
             box-shadow: 0 0 30px rgba(74, 144, 120, 0.5);
+        }
+
+        /* MAGICAL FLOATING MESSAGE CLOUD */
+        .magic-cloud {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse at center, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(220, 240, 230, 0.9) 40%,
+                rgba(180, 220, 200, 0.8) 70%,
+                transparent 100%);
+            padding: 60px 80px;
+            border-radius: 50%;
+            max-width: 600px;
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            animation: cloudAppear 5s ease-in-out forwards;
+            box-shadow: 
+                0 0 60px rgba(255, 255, 255, 0.8),
+                0 0 120px rgba(74, 144, 120, 0.3),
+                inset 0 0 60px rgba(255, 255, 255, 0.5);
+        }
+
+        .magic-cloud::before {
+            content: '✨';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: sparkleRotate 2s ease-in-out infinite;
+        }
+
+        .magic-cloud::after {
+            content: '✨';
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: sparkleRotate 2s ease-in-out infinite reverse;
+        }
+
+        @keyframes sparkleRotate {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+            50% { transform: translateX(-50%) scale(1.3) rotate(180deg); }
+        }
+
+        .magic-cloud .cloud-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #1a3d2e;
+            line-height: 1.8;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .magic-cloud .cloud-source {
+            display: block;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #4a9078;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        @keyframes cloudAppear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+                filter: blur(10px);
+            }
+            15% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(0);
+            }
+            85% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -40%) scale(1.1);
+                filter: blur(5px);
+            }
+        }
+
+        /* Floating particles around cloud */
+        .magic-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ffffff 0%, #4a9078 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1999;
+            animation: particleFloat 3s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
         }
 
         /* Sparkles Animation */
@@ -585,92 +724,94 @@
             100% { opacity: 0; transform: translateY(-100px) scale(0); }
         }
 
-        /* FOOTER */
+        /* FOOTER - Elegant Dark Semi-transparent */
         .footer {
             position: relative;
             z-index: 10;
             margin-top: auto;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            background: rgba(15, 20, 18, 0.92);
+            border-top: 1px solid rgba(74, 144, 120, 0.3);
             width: 100%;
         }
 
         .footer p {
-            font-size: 0.85rem;
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 2;
+            margin-bottom: 8px;
         }
 
-        .footer strong {
-            color: #4a9078;
-        }
-
-        .footer a {
+        .footer .brand-name {
             color: #ffffff;
-            text-decoration: none;
             font-weight: 600;
-            transition: color 0.3s;
+            font-family: 'Cinzel', serif;
         }
 
-        .footer a:hover {
+        .footer .keen-link {
             color: #4a9078;
-            text-shadow: 0 0 10px rgba(74, 144, 120, 0.5);
+            font-weight: 600;
         }
 
-        .keen-rewards {
-            display: inline-block;
-            background: linear-gradient(135deg, #4a9078 0%, #2d5a4a 100%);
+        .footer .rewards-text {
+            display: block;
+            margin: 20px auto;
+            font-size: 1.2rem;
             color: #ffffff;
-            padding: 8px 20px;
-            border-radius: 20px;
-            margin: 10px 0;
+        }
+
+        .footer .rewards-text .highlight {
+            color: #4a9078;
             font-weight: 600;
-            font-size: 0.9rem;
         }
 
         .phone-link {
             display: inline-block;
             background: #4a9078;
             color: #ffffff !important;
-            padding: 12px 25px;
-            border-radius: 25px;
-            margin-top: 10px;
-            font-size: 1rem;
+            padding: 15px 35px;
+            border-radius: 30px;
+            margin: 20px 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
             transition: all 0.3s;
+            letter-spacing: 1px;
         }
 
         .phone-link:hover {
             background: #3d7a65;
             transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(74, 144, 120, 0.4);
         }
 
         .privacy-note {
             font-style: italic;
-            color: #666;
-            font-size: 0.75rem;
-            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.95rem;
+            margin-top: 20px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .calendar-grid {
-                gap: 15px;
+        @media (max-width: 1000px) {
+            .calendar-container {
+                max-width: 100%;
+                height: 750px;
+                transform: scale(0.85);
+                transform-origin: top center;
             }
+        }
 
-            .window-card {
-                width: 100px;
-                height: 100px;
+        @media (max-width: 768px) {
+            .calendar-container {
+                height: 700px;
+                transform: scale(0.65);
             }
 
             .window-card.day-24 {
-                width: 160px;
-                height: 160px;
-            }
-
-            .day-24-container {
-                padding: 20px 0;
+                width: 150px;
+                height: 150px;
             }
 
             .modal-content {
@@ -679,6 +820,18 @@
 
             .title::before, .title::after {
                 display: none;
+            }
+
+            .audio-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calendar-container {
+                transform: scale(0.5);
             }
         }
 
@@ -700,15 +853,61 @@
         .test-mode-badge.active {
             display: block;
         }
+
+        /* Audio Toggle Button */
+        .audio-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(26, 45, 38, 0.9);
+            border: 2px solid #4a9078;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-toggle:hover {
+            background: #4a9078;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(74, 144, 120, 0.5);
+        }
+
+        .audio-toggle.playing {
+            animation: audioPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes audioPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(74, 144, 120, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(74, 144, 120, 0.7); }
+        }
     </style>
 </head>
 <body>
+    <!-- Audio Controls -->
+    <audio id="ambientAudio" loop preload="auto">
+        <source src="ambient.mp3" type="audio/mpeg">
+        <source src="ambient.ogg" type="audio/ogg">
+    </audio>
+
     <!-- Background -->
     <div class="background-layer"></div>
     <div class="background-overlay"></div>
 
     <!-- Snow -->
     <div class="snow-container" id="snowContainer"></div>
+
+    <!-- Audio Toggle Button -->
+    <button class="audio-toggle" id="audioToggle" title="Toggle Sound">
+        🔇
+    </button>
 
     <!-- Test Mode Badge -->
     <div class="test-mode-badge" id="testBadge">TEST MODE</div>
@@ -720,7 +919,9 @@
             <p class="subtitle">Your Daily Insight from Thought Seer</p>
         </header>
 
-        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="calendar-container">
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -736,10 +937,10 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 <strong>Thought Seer</strong>. All Rights Reserved.</p>
-        <p>Advisory services and readings are provided exclusively through the <strong>Keen</strong> platform.</p>
-        <p class="keen-rewards">🍀 Ask me about <strong>Keen Rewards</strong> during your reading!</p>
-        <p>Thought Seer adheres to all <strong>Keen Member Policies</strong> to guarantee your privacy and trust.</p>
+        <p>&copy; 2025 <span class="brand-name">Thought Seer</span>. All Rights Reserved.</p>
+        <p>Advisory services and readings provided exclusively through <span class="keen-link">Keen</span></p>
+        <p class="rewards-text">🍀 Ask me about <span class="highlight">Keen Rewards</span> during your reading!</p>
+        <p>Thought Seer adheres to all <span class="keen-link">Keen Member Policies</span> to guarantee your privacy and trust.</p>
         <a href="tel:18002755336,,88888" class="phone-link">📞 1.800.275.5336 x 88888</a>
         <p class="privacy-note">Privacy Notice: This calendar runs locally on your device. No personal data is collected.</p>
     </footer>
@@ -748,7 +949,41 @@
         // ==================== CONFIGURATION ====================
         const TEST_MODE = false; // Set to false for production
         
-        // Daily messages
+        // Wisdom quotes from "365 Laws of the Universe" books
+        const wisdomQuotes = [
+            { text: "Magic is born when two learn to breathe together…", source: "Laws of Dreams" },
+            { text: "Magic is when another can see the universe through your soul…", source: "Laws of Dreams" },
+            { text: "All struggles are born of separation through misunderstanding… Magic is harmony. It is perfect love.", source: "Laws of Dreams" },
+            { text: "True choices are a blessing. When the Universe respects us, it offers us choice.", source: "Laws of Dreams" },
+            { text: "Clarity is through decision… Once we choose direction, steps on the Path of Dreams and Faith will begin.", source: "Laws of Dreams" },
+            { text: "Love is a choice and is unfailing guidance…", source: "Laws of Dreams" },
+            { text: "Direction is the gift of courage… Sincerity keeps us on our Paths.", source: "Laws of Dreams" },
+            { text: "We are the Care-takers of our Souls, the Master is the Caretaker of all our choices.", source: "Laws of Dreams" },
+            { text: "Loneliness is not Oneness… it is simply loss of Faith. Loneliness is a lie.", source: "Laws of Dreams" },
+            { text: "Questions create confusions, silence creates clarity…", source: "Laws of Dreams" },
+            { text: "Fidelity is Love shown through a Pure Soul and Clear Mind…", source: "Laws of Dreams" },
+            { text: "Crying is the blessing of God on a Soul, when rawness of emotions break their solace from hidden places.", source: "Laws of Dreams" },
+            { text: "Re-living is a new breath… a new Path, it is the re-birth of a person.", source: "Laws of Dreams" },
+            { text: "Faith is our Guide.", source: "Laws of Faith" },
+            { text: "Faith is the freedom of the caged bird with no worries.", source: "Laws of Faith" },
+            { text: "Faith is meant to travel with us down our paths.", source: "Laws of Faith" },
+            { text: "The rain supports the generation of a new moment of a new dream.", source: "Laws of Faith" },
+            { text: "The Universe is your Master as you are the Master of the Universe.", source: "Laws of Faith" },
+            { text: "The Master is the majestic flow of Life through our Body, Mind and Souls.", source: "Laws of Faith" },
+            { text: "Love is nameless. Their name is not what they are called but the makeup of their Being.", source: "Laws of Love" },
+            { text: "True Love is natural and universal.", source: "Laws of Love" },
+            { text: "Direction is of love and love is of Abundance…", source: "Laws of Love" },
+            { text: "Finding the one you Love is merely about asking.", source: "Laws of Love" },
+            { text: "When there is hope, we begin to live.", source: "Laws of Pain" },
+            { text: "Blessings can land only on a Soul that is still, silent and long-suffering.", source: "Laws of Pain" },
+            { text: "Healing honours the Universe's nature and its beauty.", source: "Laws of Pain" },
+            { text: "Infants are healing to old Beings… they are created of raw purity.", source: "Laws of Pain" },
+            { text: "Balance is found in healing of the Soul first, and the body follows.", source: "Laws of Dreams" },
+            { text: "Life and death have a connecting doorway… Death is a passage to a new beginning.", source: "Laws of Dreams" },
+            { text: "Nature is made of each piece of Being, completing a Cycle to join the two ends of Life.", source: "Laws of Dreams" }
+        ];
+
+        // Daily messages (shown in modal after cloud fades)
         const messages = {
             1: "A quiet start leads to a loud victory. Trust the process.",
             2: "Watch for the color blue today — it carries a message for you.",
@@ -809,16 +1044,138 @@
             setTimeout(createSnowflake, i * 50);
         }
 
+        // ==================== AUDIO SYSTEM ====================
+        const ambientAudio = document.getElementById('ambientAudio');
+        const audioToggle = document.getElementById('audioToggle');
+        let isPlaying = false;
+
+        // Create ambient sounds using Web Audio API as fallback
+        let audioContext;
+        let windOscillator;
+        let jingleInterval;
+
+        function initWebAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create wind sound (filtered noise)
+                const bufferSize = 2 * audioContext.sampleRate;
+                const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+                
+                const windNoise = audioContext.createBufferSource();
+                windNoise.buffer = noiseBuffer;
+                windNoise.loop = true;
+                
+                // Low-pass filter for wind effect
+                const windFilter = audioContext.createBiquadFilter();
+                windFilter.type = 'lowpass';
+                windFilter.frequency.value = 400;
+                
+                // Gain for wind volume
+                const windGain = audioContext.createGain();
+                windGain.gain.value = 0.08;
+                
+                windNoise.connect(windFilter);
+                windFilter.connect(windGain);
+                windGain.connect(audioContext.destination);
+                
+                windNoise.start();
+                windOscillator = { noise: windNoise, gain: windGain };
+                
+                // Jingle bells function
+                function playJingle() {
+                    if (!isPlaying) return;
+                    
+                    const frequencies = [1200, 1400, 1600, 1800, 2000];
+                    const freq = frequencies[Math.floor(Math.random() * frequencies.length)];
+                    
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = freq;
+                    
+                    gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                }
+                
+                // Random jingles
+                jingleInterval = setInterval(() => {
+                    if (isPlaying && Math.random() > 0.7) {
+                        playJingle();
+                        if (Math.random() > 0.5) {
+                            setTimeout(playJingle, 100);
+                        }
+                    }
+                }, 2000);
+                
+            } catch (e) {
+                console.log('Web Audio API not supported');
+            }
+        }
+
+        audioToggle.addEventListener('click', () => {
+            if (!audioContext) {
+                initWebAudio();
+            }
+            
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                if (windOscillator) {
+                    windOscillator.gain.gain.value = 0.08;
+                }
+                audioToggle.textContent = '🔊';
+                audioToggle.classList.add('playing');
+                
+                // Try to play ambient file if it exists
+                ambientAudio.play().catch(() => {});
+            } else {
+                if (windOscillator) {
+                    windOscillator.gain.gain.value = 0;
+                }
+                audioToggle.textContent = '🔇';
+                audioToggle.classList.remove('playing');
+                ambientAudio.pause();
+            }
+        });
+
         // ==================== CALENDAR CREATION ====================
         const calendarGrid = document.getElementById('calendarGrid');
         const hueClasses = ['hue-green', 'hue-blue', 'hue-red', 'hue-purple', 'hue-cyan'];
 
-        // Create Day 24 container first (centered at top)
-        const day24Container = document.createElement('div');
-        day24Container.className = 'day-24-container';
-        calendarGrid.appendChild(day24Container);
+        // Calculate circular positions
+        function getCircularPosition(index, total, centerX, centerY, radius) {
+            const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+            return { x, y };
+        }
 
-        // Create windows 1-24
+        // Get container dimensions
+        const containerWidth = 1000;
+        const containerHeight = 900;
+        const centerX = containerWidth / 2;
+        const centerY = containerHeight / 2;
+
+        // Create windows 1-23 in circles around Day 24
+        const innerRing = [1, 2, 3, 4, 5, 6, 7, 8]; // 8 windows in inner ring
+        const outerRing = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]; // 15 windows in outer ring
+
+        // Create all windows
         for (let day = 1; day <= 24; day++) {
             const card = document.createElement('div');
             card.className = 'window-card';
@@ -838,21 +1195,38 @@
                 card.classList.add(randomHue);
             }
 
-            // Add drifting animation to non-Day-24 windows
-            if (day !== 24) {
+            // Position the card
+            if (day === 24) {
+                // Day 24 is centered via CSS
+            } else if (innerRing.includes(day)) {
+                // Inner ring
+                const index = innerRing.indexOf(day);
+                const pos = getCircularPosition(index, innerRing.length, centerX, centerY, 200);
+                card.style.left = `${pos.x - 50}px`;
+                card.style.top = `${pos.y - 50}px`;
                 card.classList.add('drifting');
-                // Randomize drift parameters based on time of day
-                const timeOffset = (new Date().getHours() * 60 + new Date().getMinutes()) / 1440; // 0-1 based on time
+            } else {
+                // Outer ring
+                const index = outerRing.indexOf(day);
+                const pos = getCircularPosition(index, outerRing.length, centerX, centerY, 350);
+                card.style.left = `${pos.x - 50}px`;
+                card.style.top = `${pos.y - 50}px`;
+                card.classList.add('drifting');
+            }
+
+            // Add drifting animation parameters
+            if (day !== 24) {
+                const timeOffset = (new Date().getHours() * 60 + new Date().getMinutes()) / 1440;
                 const dayOffset = day / 24;
                 
-                card.style.setProperty('--drift-duration', `${15 + Math.random() * 15}s`);
-                card.style.setProperty('--drift-delay', `${-Math.random() * 20}s`);
-                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 15).toFixed(1)}px`);
-                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 12).toFixed(1)}px`);
-                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -12).toFixed(1)}px`);
-                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 15).toFixed(1)}px`);
-                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 10).toFixed(1)}px`);
-                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -8).toFixed(1)}px`);
+                card.style.setProperty('--drift-duration', `${40 + Math.random() * 30}s`);
+                card.style.setProperty('--drift-delay', `${-Math.random() * 40}s`);
+                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 20).toFixed(1)}px`);
+                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -15).toFixed(1)}px`);
+                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 20).toFixed(1)}px`);
+                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 12).toFixed(1)}px`);
+                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -10).toFixed(1)}px`);
             }
 
             card.innerHTML = `
@@ -865,13 +1239,7 @@
             `;
 
             card.addEventListener('click', () => handleWindowClick(day, card));
-            
-            // Day 24 goes in its special container, others in the grid
-            if (day === 24) {
-                day24Container.appendChild(card);
-            } else {
-                calendarGrid.appendChild(card);
-            }
+            calendarGrid.appendChild(card);
         }
 
         // Update drift positions periodically based on time
@@ -881,12 +1249,12 @@
             
             cards.forEach((card, index) => {
                 const dayOffset = (index + 1) / 24;
-                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 15).toFixed(1)}px`);
-                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 12).toFixed(1)}px`);
-                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -12).toFixed(1)}px`);
-                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 15).toFixed(1)}px`);
-                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 10).toFixed(1)}px`);
-                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -8).toFixed(1)}px`);
+                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 20).toFixed(1)}px`);
+                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -15).toFixed(1)}px`);
+                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 20).toFixed(1)}px`);
+                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 12).toFixed(1)}px`);
+                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -10).toFixed(1)}px`);
             });
         }
 
@@ -915,6 +1283,46 @@
             return false;
         }
 
+        // ==================== MAGIC CLOUD MESSAGE ====================
+        function showMagicCloud(day) {
+            // Get a random wisdom quote
+            const quote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
+            
+            // Create the cloud element
+            const cloud = document.createElement('div');
+            cloud.className = 'magic-cloud';
+            cloud.innerHTML = `
+                <div class="cloud-message">
+                    "${quote.text}"
+                    <span class="cloud-source">— ${quote.source}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(cloud);
+            
+            // Create floating particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'magic-particle';
+                    particle.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
+                    particle.style.top = `${50 + (Math.random() - 0.5) * 20}%`;
+                    particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
+                    particle.style.setProperty('--ty', `${-100 - Math.random() * 100}px`);
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 100);
+            }
+            
+            // Remove cloud after animation
+            setTimeout(() => {
+                cloud.remove();
+                // Now open the modal with the daily message
+                openModal(day);
+            }, 5000);
+        }
+
         // ==================== WINDOW INTERACTION ====================
         function handleWindowClick(day, card) {
             if (card.classList.contains('locked')) {
@@ -926,8 +1334,8 @@
             card.classList.add('opened');
             localStorage.setItem('advent_opened_' + day, 'true');
 
-            // Open modal after a brief delay for the visual effect
-            setTimeout(() => openModal(day), 300);
+            // Show magic cloud first, then modal
+            setTimeout(() => showMagicCloud(day), 300);
         }
 
         function showLockedMessage(day) {
