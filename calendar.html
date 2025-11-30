@@ -22,18 +22,38 @@
             color: #fff;
         }
 
-        /* BACKGROUND - Try GIF first, fallback to PNG */
-        .background-layer {
+        /* BACKGROUND - PNG starts visible, GIF fades in */
+        .background-layer-png {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            background-image: url('background.gif'), url('background.png');
+            background-image: url('background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+        }
+
+        .background-layer-gif {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: url('background.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0;
+            animation: fadeInGif 3s ease-in-out 2s forwards;
+        }
+
+        @keyframes fadeInGif {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         .background-overlay {
@@ -1093,19 +1113,20 @@
     ║  Recommended: ambient.mp3 (or rename your file to this)      ║
     ╚═══════════════════════════════════════════════════════════════╝
     -->
-    <audio id="ambientAudio" loop preload="auto" volume="0.25">
+    <audio id="ambientAudio" preload="auto" volume="0.10">
         <!-- YOUR AUDIO FILE: Change "ambient.mp3" to your filename -->
         <source src="ambient.mp3" type="audio/mpeg">
         <source src="ambient.ogg" type="audio/ogg">
         <source src="ambient.wav" type="audio/wav">
     </audio>
     <script>
-        // Set audio volume to 10% (very quiet)
+        // Set audio volume to 10% (very quiet) - plays once, no loop
         document.getElementById('ambientAudio').volume = 0.10;
     </script>
 
-    <!-- Background -->
-    <div class="background-layer"></div>
+    <!-- Background - PNG first, then GIF fades in -->
+    <div class="background-layer-png"></div>
+    <div class="background-layer-gif"></div>
     <div class="background-overlay"></div>
 
     <!-- Snow -->
