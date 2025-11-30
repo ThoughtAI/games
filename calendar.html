@@ -132,14 +132,17 @@
             position: relative;
             width: 100%;
             max-width: 1000px;
-            height: 900px;
+            min-height: 900px;
             margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .calendar-grid {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 1000px;
+            height: 900px;
         }
 
         /* WINDOW CARD */
@@ -385,11 +388,12 @@
 
         /* SPECIAL DAY 24 - Centered with Wreath */
         .window-card.day-24 {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             left: 50% !important;
             top: 50% !important;
-            transform: translate(-50%, -50%) !important;
+            margin-left: -80px !important;
+            margin-top: -80px !important;
             z-index: 50;
             /* No drifting for day 24 */
             animation: day24Glow 4s ease-in-out infinite !important;
@@ -854,6 +858,144 @@
             display: block;
         }
 
+        /* TEST PANEL */
+        .test-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100vh;
+            background: rgba(15, 20, 18, 0.98);
+            border-left: 2px solid #4a9078;
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .test-panel.open {
+            transform: translateX(0);
+        }
+
+        .test-panel-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(74, 144, 120, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 9999;
+            font-size: 1rem;
+            font-family: 'Cinzel', serif;
+        }
+
+        .test-panel-toggle:hover {
+            background: #4a9078;
+        }
+
+        .test-panel h3 {
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #4a9078;
+            padding-bottom: 10px;
+        }
+
+        .test-panel .day-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .test-panel .day-btn {
+            background: rgba(74, 144, 120, 0.3);
+            border: 1px solid #4a9078;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .test-panel .day-btn:hover {
+            background: #4a9078;
+        }
+
+        .test-panel .day-btn.active {
+            background: #4a9078;
+            box-shadow: 0 0 10px rgba(74, 144, 120, 0.5);
+        }
+
+        .test-panel .preview-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .test-panel label {
+            display: block;
+            color: #b8d4c8;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .test-panel textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #4a9078;
+            border-radius: 5px;
+            color: white;
+            padding: 10px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .test-panel .preview-btn {
+            width: 100%;
+            background: #4a9078;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .test-panel .preview-btn:hover {
+            background: #5db896;
+            box-shadow: 0 0 15px rgba(74, 144, 120, 0.5);
+        }
+
+        .test-panel .reset-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-top: 20px;
+        }
+
+        .test-panel .reset-btn:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
         /* Audio Toggle Button */
         .audio-toggle {
             position: fixed;
@@ -911,6 +1053,37 @@
 
     <!-- Test Mode Badge -->
     <div class="test-mode-badge" id="testBadge">TEST MODE</div>
+
+    <!-- Test Panel Toggle -->
+    <button class="test-panel-toggle" id="testPanelToggle">🧪 Test</button>
+
+    <!-- Test Panel -->
+    <div class="test-panel" id="testPanel">
+        <h3>🧪 Message Tester</h3>
+        
+        <div class="preview-section">
+            <label>Select Day to Preview:</label>
+            <div class="day-selector" id="daySelector"></div>
+        </div>
+
+        <div class="preview-section">
+            <label>Wisdom Quote (Cloud Message):</label>
+            <textarea id="testQuote" placeholder="Enter wisdom quote..."></textarea>
+            <label style="margin-top:10px;">Quote Source:</label>
+            <textarea id="testSource" style="min-height:40px;" placeholder="e.g., Laws of Dreams"></textarea>
+        </div>
+
+        <div class="preview-section">
+            <label>Daily Message (Modal):</label>
+            <textarea id="testMessage" placeholder="Enter daily message..."></textarea>
+        </div>
+
+        <button class="preview-btn" id="previewCloudBtn">✨ Preview Cloud Message</button>
+        <button class="preview-btn" id="previewModalBtn" style="margin-top:8px; background:#2d5a4a;">📜 Preview Modal</button>
+        <button class="preview-btn" id="previewBothBtn" style="margin-top:8px; background:#1a3d2e;">🎭 Preview Both (Full Experience)</button>
+        
+        <button class="reset-btn" id="resetStorageBtn">🗑️ Reset All Opened Windows</button>
+    </div>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -1446,6 +1619,143 @@
         // ==================== TEST MODE INDICATOR ====================
         if (TEST_MODE) {
             document.getElementById('testBadge').classList.add('active');
+        }
+
+        // ==================== TEST PANEL ====================
+        const testPanel = document.getElementById('testPanel');
+        const testPanelToggle = document.getElementById('testPanelToggle');
+        const daySelector = document.getElementById('daySelector');
+        const testQuote = document.getElementById('testQuote');
+        const testSource = document.getElementById('testSource');
+        const testMessage = document.getElementById('testMessage');
+        let selectedTestDay = 1;
+
+        // Toggle panel
+        testPanelToggle.addEventListener('click', () => {
+            testPanel.classList.toggle('open');
+        });
+
+        // Create day buttons
+        for (let i = 1; i <= 24; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'day-btn' + (i === 1 ? ' active' : '');
+            btn.textContent = i;
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedTestDay = i;
+                
+                // Load current message for this day
+                testMessage.value = messages[i] || '';
+                
+                // Load a random quote
+                const randomQuote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
+                testQuote.value = randomQuote.text;
+                testSource.value = randomQuote.source;
+            });
+            daySelector.appendChild(btn);
+        }
+
+        // Initialize with day 1
+        testMessage.value = messages[1] || '';
+        const initialQuote = wisdomQuotes[0];
+        testQuote.value = initialQuote.text;
+        testSource.value = initialQuote.source;
+
+        // Preview cloud only
+        document.getElementById('previewCloudBtn').addEventListener('click', () => {
+            const customQuote = {
+                text: testQuote.value || 'Your wisdom quote here...',
+                source: testSource.value || 'Laws of Dreams'
+            };
+            showMagicCloudCustom(customQuote, false);
+        });
+
+        // Preview modal only
+        document.getElementById('previewModalBtn').addEventListener('click', () => {
+            const customMessage = testMessage.value || messages[selectedTestDay];
+            openModalCustom(selectedTestDay, customMessage);
+        });
+
+        // Preview both (full experience)
+        document.getElementById('previewBothBtn').addEventListener('click', () => {
+            const customQuote = {
+                text: testQuote.value || 'Your wisdom quote here...',
+                source: testSource.value || 'Laws of Dreams'
+            };
+            const customMessage = testMessage.value || messages[selectedTestDay];
+            showMagicCloudCustom(customQuote, true, selectedTestDay, customMessage);
+        });
+
+        // Reset storage
+        document.getElementById('resetStorageBtn').addEventListener('click', () => {
+            if (confirm('This will reset all opened windows. Are you sure?')) {
+                for (let i = 1; i <= 24; i++) {
+                    localStorage.removeItem('advent_opened_' + i);
+                }
+                location.reload();
+            }
+        });
+
+        // Custom cloud function for testing
+        function showMagicCloudCustom(quote, showModalAfter = false, day = 1, customMessage = '') {
+            const cloud = document.createElement('div');
+            cloud.className = 'magic-cloud';
+            cloud.innerHTML = `
+                <div class="cloud-message">
+                    "${quote.text}"
+                    <span class="cloud-source">— ${quote.source}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(cloud);
+            
+            // Create floating particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'magic-particle';
+                    particle.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
+                    particle.style.top = `${50 + (Math.random() - 0.5) * 20}%`;
+                    particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
+                    particle.style.setProperty('--ty', `${-100 - Math.random() * 100}px`);
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 100);
+            }
+            
+            setTimeout(() => {
+                cloud.remove();
+                if (showModalAfter) {
+                    openModalCustom(day, customMessage);
+                }
+            }, 5000);
+        }
+
+        // Custom modal function for testing
+        function openModalCustom(day, customMessage) {
+            const isChristmasEve = day === 24;
+            
+            modalDay.textContent = isChristmasEve ? '🎄 Christmas Eve 🎄' : `December ${day}`;
+            modalImage.src = `${day}.jpg`;
+            modalImage.onerror = function() {
+                this.style.display = 'none';
+            };
+            modalImage.onload = function() {
+                this.style.display = 'block';
+            };
+            
+            modalMessage.innerHTML = customMessage || messages[day] || "A special message awaits...";
+            
+            if (isChristmasEve) {
+                modalMessage.classList.add('christmas-message');
+                createSparkles();
+            } else {
+                modalMessage.classList.remove('christmas-message');
+            }
+
+            modal.classList.add('show');
         }
 
         // ==================== PRELOAD IMAGES ====================
