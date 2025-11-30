@@ -44,9 +44,9 @@
             height: 100%;
             z-index: 1;
             background: radial-gradient(ellipse at center, 
-                rgba(10, 10, 18, 0.3) 0%, 
-                rgba(10, 10, 18, 0.7) 50%,
-                rgba(10, 10, 18, 0.85) 100%);
+                rgba(10, 10, 18, 0.5) 0%, 
+                rgba(10, 10, 18, 0.75) 50%,
+                rgba(10, 10, 18, 0.9) 100%);
             pointer-events: none;
         }
 
@@ -943,6 +943,7 @@
             z-index: 9999;
             font-size: 1rem;
             font-family: 'Cinzel', serif;
+            display: none; /* Hidden for production */
         }
 
         .test-panel-toggle:hover {
@@ -1099,8 +1100,8 @@
         <source src="ambient.wav" type="audio/wav">
     </audio>
     <script>
-        // Set audio volume to 25%
-        document.getElementById('ambientAudio').volume = 0.25;
+        // Set audio volume to 10% (very quiet)
+        document.getElementById('ambientAudio').volume = 0.10;
     </script>
 
     <!-- Background -->
@@ -1349,9 +1350,9 @@
                 windFilter.type = 'lowpass';
                 windFilter.frequency.value = 400;
                 
-                // Gain for wind volume - reduced to 25%
+                // Gain for wind volume - reduced to 10%
                 const windGain = audioContext.createGain();
-                windGain.gain.value = 0.02;
+                windGain.gain.value = 0.008;
                 
                 windNoise.connect(windFilter);
                 windFilter.connect(windGain);
@@ -1373,8 +1374,8 @@
                     oscillator.type = 'sine';
                     oscillator.frequency.value = freq;
                     
-                    gainNode.gain.setValueAtTime(0.0075, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.00025, audioContext.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.003, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.3);
                     
                     oscillator.connect(gainNode);
                     gainNode.connect(audioContext.destination);
@@ -1419,7 +1420,7 @@
                         audioContext.resume();
                     }
                     if (windOscillator) {
-                        windOscillator.gain.gain.value = 0.02;
+                        windOscillator.gain.gain.value = 0.008;
                     }
                 });
             } else {
