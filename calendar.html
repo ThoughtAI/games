@@ -595,65 +595,76 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: radial-gradient(ellipse at center, 
-                rgba(255, 255, 255, 0.95) 0%, 
-                rgba(220, 240, 230, 0.9) 40%,
-                rgba(180, 220, 200, 0.8) 70%,
-                transparent 100%);
-            padding: 60px 80px;
-            border-radius: 50%;
-            max-width: 600px;
-            text-align: center;
+            width: 650px;
+            height: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 2000;
             opacity: 0;
             pointer-events: none;
-            animation: cloudAppear 5s ease-in-out forwards;
-            box-shadow: 
-                0 0 60px rgba(255, 255, 255, 0.8),
-                0 0 120px rgba(74, 144, 120, 0.3),
-                inset 0 0 60px rgba(255, 255, 255, 0.5);
+            animation: cloudAppear 7s ease-in-out forwards;
         }
 
-        .magic-cloud::before {
-            content: '✨';
+        .cloud-image {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            animation: sparkleRotate 2s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
         }
 
-        .magic-cloud::after {
-            content: '✨';
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            animation: sparkleRotate 2s ease-in-out infinite reverse;
+        .cloud-text-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 80px;
+            max-width: 500px;
         }
 
-        @keyframes sparkleRotate {
-            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
-            50% { transform: translateX(-50%) scale(1.3) rotate(180deg); }
+        .magic-cloud .cloud-book {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: #1a3d2e;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+        }
+
+        .magic-cloud .cloud-book-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: #4a9078;
+            font-style: italic;
+            margin-bottom: 15px;
         }
 
         .magic-cloud .cloud-message {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-style: italic;
             color: #1a3d2e;
-            line-height: 1.8;
+            line-height: 1.7;
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
         }
 
-        .magic-cloud .cloud-source {
-            display: block;
-            margin-top: 20px;
+        .magic-cloud .cloud-oracle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: #2d5a4a;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(74, 144, 120, 0.3);
+        }
+
+        .magic-cloud .cloud-signature {
+            font-family: 'Cinzel', serif;
             font-size: 1.1rem;
             color: #4a9078;
-            font-style: normal;
             font-weight: 600;
         }
 
@@ -661,22 +672,63 @@
             0% {
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.5);
-                filter: blur(10px);
             }
             15% {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
-                filter: blur(0);
             }
             85% {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
-                filter: blur(0);
             }
             100% {
                 opacity: 0;
                 transform: translate(-50%, -40%) scale(1.1);
-                filter: blur(5px);
+            }
+        }
+
+        /* Twinkling Stars */
+        .twinkle-star {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1999;
+            animation: twinkle var(--twinkle-duration, 1s) ease-in-out infinite;
+            box-shadow: 0 0 6px #fff, 0 0 12px rgba(255, 255, 200, 0.8);
+        }
+
+        .twinkle-star.large {
+            width: 6px;
+            height: 6px;
+            box-shadow: 0 0 10px #fff, 0 0 20px rgba(255, 255, 200, 0.8);
+        }
+
+        .twinkle-star::before {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: #fffde7;
+            text-shadow: 0 0 8px #fff;
+        }
+
+        .twinkle-star.large::before {
+            font-size: 18px;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                opacity: 0.3; 
+                transform: scale(0.8);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.2);
             }
         }
 
@@ -1040,12 +1092,16 @@
     ║  Recommended: ambient.mp3 (or rename your file to this)      ║
     ╚═══════════════════════════════════════════════════════════════╝
     -->
-    <audio id="ambientAudio" loop preload="auto">
+    <audio id="ambientAudio" loop preload="auto" volume="0.25">
         <!-- YOUR AUDIO FILE: Change "ambient.mp3" to your filename -->
         <source src="ambient.mp3" type="audio/mpeg">
         <source src="ambient.ogg" type="audio/ogg">
         <source src="ambient.wav" type="audio/wav">
     </audio>
+    <script>
+        // Set audio volume to 25%
+        document.getElementById('ambientAudio').volume = 0.25;
+    </script>
 
     <!-- Background -->
     <div class="background-layer"></div>
@@ -1130,66 +1186,103 @@
         // ==================== CONFIGURATION ====================
         const TEST_MODE = false; // Set to false for production
         
-        // Wisdom quotes from "365 Laws of the Universe" books
+        // Cloud images (upload cloud1.png through cloud7.png)
+        const cloudImages = ['cloud1.png', 'cloud2.png', 'cloud3.png', 'cloud4.png', 'cloud6.png', 'cloud7.png'];
+        
+        // Wisdom quotes from "Guidance is a Piece of God" book
         const wisdomQuotes = [
-            { text: "Magic is born when two learn to breathe together…", source: "Laws of Dreams" },
-            { text: "Magic is when another can see the universe through your soul…", source: "Laws of Dreams" },
-            { text: "All struggles are born of separation through misunderstanding… Magic is harmony. It is perfect love.", source: "Laws of Dreams" },
-            { text: "True choices are a blessing. When the Universe respects us, it offers us choice.", source: "Laws of Dreams" },
-            { text: "Clarity is through decision… Once we choose direction, steps on the Path of Dreams and Faith will begin.", source: "Laws of Dreams" },
-            { text: "Love is a choice and is unfailing guidance…", source: "Laws of Dreams" },
-            { text: "Direction is the gift of courage… Sincerity keeps us on our Paths.", source: "Laws of Dreams" },
-            { text: "We are the Care-takers of our Souls, the Master is the Caretaker of all our choices.", source: "Laws of Dreams" },
-            { text: "Loneliness is not Oneness… it is simply loss of Faith. Loneliness is a lie.", source: "Laws of Dreams" },
-            { text: "Questions create confusions, silence creates clarity…", source: "Laws of Dreams" },
-            { text: "Fidelity is Love shown through a Pure Soul and Clear Mind…", source: "Laws of Dreams" },
-            { text: "Crying is the blessing of God on a Soul, when rawness of emotions break their solace from hidden places.", source: "Laws of Dreams" },
-            { text: "Re-living is a new breath… a new Path, it is the re-birth of a person.", source: "Laws of Dreams" },
-            { text: "Faith is our Guide.", source: "Laws of Faith" },
-            { text: "Faith is the freedom of the caged bird with no worries.", source: "Laws of Faith" },
-            { text: "Faith is meant to travel with us down our paths.", source: "Laws of Faith" },
-            { text: "The rain supports the generation of a new moment of a new dream.", source: "Laws of Faith" },
-            { text: "The Universe is your Master as you are the Master of the Universe.", source: "Laws of Faith" },
-            { text: "The Master is the majestic flow of Life through our Body, Mind and Souls.", source: "Laws of Faith" },
-            { text: "Love is nameless. Their name is not what they are called but the makeup of their Being.", source: "Laws of Love" },
-            { text: "True Love is natural and universal.", source: "Laws of Love" },
-            { text: "Direction is of love and love is of Abundance…", source: "Laws of Love" },
-            { text: "Finding the one you Love is merely about asking.", source: "Laws of Love" },
-            { text: "When there is hope, we begin to live.", source: "Laws of Pain" },
-            { text: "Blessings can land only on a Soul that is still, silent and long-suffering.", source: "Laws of Pain" },
-            { text: "Healing honours the Universe's nature and its beauty.", source: "Laws of Pain" },
-            { text: "Infants are healing to old Beings… they are created of raw purity.", source: "Laws of Pain" },
-            { text: "Balance is found in healing of the Soul first, and the body follows.", source: "Laws of Dreams" },
-            { text: "Life and death have a connecting doorway… Death is a passage to a new beginning.", source: "Laws of Dreams" },
-            { text: "Nature is made of each piece of Being, completing a Cycle to join the two ends of Life.", source: "Laws of Dreams" }
+            { text: "Magic is born when two learn to breathe together…", book: "Laws of Dreams" },
+            { text: "Magic is when another can see the universe through your soul…", book: "Laws of Dreams" },
+            { text: "All struggles are born of separation through misunderstanding… Magic is harmony. It is perfect love.", book: "Laws of Dreams" },
+            { text: "True choices are a blessing. When the Universe respects us, it offers us choice.", book: "Laws of Dreams" },
+            { text: "Clarity is through decision… Once we choose direction, steps on the Path of Dreams and Faith will begin.", book: "Laws of Dreams" },
+            { text: "Love is a choice and is unfailing guidance…", book: "Laws of Dreams" },
+            { text: "Direction is the gift of courage… Sincerity keeps us on our Paths.", book: "Laws of Dreams" },
+            { text: "We are the Care-takers of our Souls, the Master is the Caretaker of all our choices.", book: "Laws of Dreams" },
+            { text: "Loneliness is not Oneness… it is simply loss of Faith. Loneliness is a lie.", book: "Laws of Dreams" },
+            { text: "Questions create confusions, silence creates clarity…", book: "Laws of Dreams" },
+            { text: "Fidelity is Love shown through a Pure Soul and Clear Mind…", book: "Laws of Dreams" },
+            { text: "Crying is the blessing of God on a Soul, when rawness of emotions break their solace from hidden places.", book: "Laws of Dreams" },
+            { text: "Re-living is a new breath… a new Path, it is the re-birth of a person.", book: "Laws of Dreams" },
+            { text: "Faith is our Guide.", book: "Laws of Faith" },
+            { text: "Faith is the freedom of the caged bird with no worries.", book: "Laws of Faith" },
+            { text: "Faith is meant to travel with us down our paths.", book: "Laws of Faith" },
+            { text: "The rain supports the generation of a new moment of a new dream.", book: "Laws of Faith" },
+            { text: "The Universe is your Master as you are the Master of the Universe.", book: "Laws of Faith" },
+            { text: "The Master is the majestic flow of Life through our Body, Mind and Souls.", book: "Laws of Faith" },
+            { text: "Love is nameless. Their name is not what they are called but the makeup of their Being.", book: "Laws of Love" },
+            { text: "True Love is natural and universal.", book: "Laws of Love" },
+            { text: "Direction is of love and love is of Abundance…", book: "Laws of Love" },
+            { text: "Finding the one you Love is merely about asking.", book: "Laws of Love" },
+            { text: "When there is hope, we begin to live.", book: "Laws of Pain" },
+            { text: "Blessings can land only on a Soul that is still, silent and long-suffering.", book: "Laws of Pain" },
+            { text: "Healing honours the Universe's nature and its beauty.", book: "Laws of Pain" },
+            { text: "Infants are healing to old Beings… they are created of raw purity.", book: "Laws of Pain" },
+            { text: "Balance is found in healing of the Soul first, and the body follows.", book: "Laws of Pain" },
+            { text: "Life and death have a connecting doorway… Death is a passage to a new beginning.", book: "Laws of Separateness & Oneness" },
+            { text: "Nature is made of each piece of Being, completing a Cycle to join the two ends of Life.", book: "Laws of Separateness & Oneness" }
         ];
 
-        // Daily messages (shown in modal after cloud fades)
-        const messages = {
-            1: "A quiet start leads to a loud victory. Trust the process.",
-            2: "Watch for the color blue today — it carries a message for you.",
-            3: "Patience is your strongest weapon. Good things take time.",
-            4: "An unexpected message brings clarity. Keep your heart open.",
-            5: "You are being protected from unseen negativity. Feel safe.",
-            6: "A small financial win is coming your way. Stay grateful.",
-            7: "Dream big tonight — your intuition is heightened.",
-            8: "Clear the clutter to clear your mind. Space creates peace.",
-            9: "Someone from the past is thinking of you with fondness.",
-            10: "Double numbers (11:11) are a sign. Pay attention.",
-            11: "Step into your power today. Speak your truth.",
-            12: "Nature heals. Take a walk and breathe deeply.",
-            13: "Lucky day! Take a chance on something you've been considering.",
-            14: "You are stronger than you think. Remember your resilience.",
-            15: "Halfway mark. Take a breath and celebrate your journey.",
-            16: "The Diamond Pattern is active. Abundance flows to you.",
-            17: "A secret revealed works in your favor. Trust the timing.",
-            18: "Stand your ground with elegance. Your boundaries matter.",
-            19: "Beauty surrounds you today. Open your eyes to wonder.",
-            20: "The 20-point check: Assess what serves your highest good.",
-            21: "Winter Solstice. Light a candle for new beginnings.",
-            22: "A new path opens up before you. Walk with confidence.",
-            23: "Expect a sweet treat. Joy finds you unexpectedly.",
-            24: "✨ Merry Christmas with Love ✨<br><br>Peace and Joy are yours today and always. May the magic of this season fill your heart with wonder and your soul with light."
+        // Oracle messages - Christmas wishes about personal matters
+        const oracleMessages = [
+            "This Christmas, may your heart find the peace it has been seeking.",
+            "A blessing of abundance flows toward you this holiday season.",
+            "Love surrounds you more than you know. Open your heart to receive it.",
+            "This season brings clarity to a decision you've been pondering.",
+            "Someone is thinking of you with warmth and gratitude right now.",
+            "Financial blessings are aligning for you as the year closes.",
+            "Your patience will be rewarded before the new year arrives.",
+            "A reunion with someone special is written in your stars.",
+            "Trust the path you're on – it leads exactly where you need to be.",
+            "Healing energy surrounds your family this Christmas.",
+            "An unexpected gift of joy arrives when you least expect it.",
+            "Your dreams are closer to manifesting than you realize.",
+            "This Christmas, release what no longer serves you and make room for miracles.",
+            "A message of hope reaches you through an unlikely messenger.",
+            "Your inner strength shines brighter than ever this season.",
+            "Romance and warmth fill your holiday moments.",
+            "Protection surrounds you and your loved ones this Christmas.",
+            "A creative inspiration leads to new opportunities.",
+            "Forgiveness opens a door you thought was closed forever.",
+            "Gratitude multiplies your blessings tenfold this season.",
+            "A long-held wish begins its journey to fulfillment.",
+            "Your kindness returns to you in beautiful, unexpected ways.",
+            "Peace settles into your home and heart this Christmas Eve.",
+            "The magic of the season reveals your true heart's desire."
+        ];
+
+        // Generate a seed based on visitor (using localStorage) for consistent randomization per person
+        function getVisitorSeed() {
+            let seed = localStorage.getItem('advent_visitor_seed');
+            if (!seed) {
+                seed = Math.floor(Math.random() * 1000000).toString();
+                localStorage.setItem('advent_visitor_seed', seed);
+            }
+            return parseInt(seed);
+        }
+
+        // Seeded random function for consistent per-visitor randomization
+        function seededRandom(seed) {
+            const x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
+        }
+
+        // Get randomized message for a specific day and visitor
+        function getMessageForDay(day) {
+            const seed = getVisitorSeed() + day;
+            const quoteIndex = Math.floor(seededRandom(seed) * wisdomQuotes.length);
+            const oracleIndex = Math.floor(seededRandom(seed + 100) * oracleMessages.length);
+            
+            return {
+                quote: wisdomQuotes[quoteIndex],
+                oracle: oracleMessages[oracleIndex]
+            };
+        }
+
+        // Special Day 24 message
+        const day24Message = {
+            quote: { text: "Peace and Joy are the gifts of a Soul aligned with the Universe.", book: "Laws of Love" },
+            oracle: "✨ Merry Christmas with Love ✨\n\nMay the magic of this sacred night fill your heart with wonder, your home with warmth, and your soul with everlasting light."
         };
 
         // ==================== SNOW EFFECT ====================
@@ -1256,9 +1349,9 @@
                 windFilter.type = 'lowpass';
                 windFilter.frequency.value = 400;
                 
-                // Gain for wind volume
+                // Gain for wind volume - reduced to 25%
                 const windGain = audioContext.createGain();
-                windGain.gain.value = 0.08;
+                windGain.gain.value = 0.02;
                 
                 windNoise.connect(windFilter);
                 windFilter.connect(windGain);
@@ -1280,8 +1373,8 @@
                     oscillator.type = 'sine';
                     oscillator.frequency.value = freq;
                     
-                    gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.0075, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.00025, audioContext.currentTime + 0.3);
                     
                     oscillator.connect(gainNode);
                     gainNode.connect(audioContext.destination);
@@ -1326,7 +1419,7 @@
                         audioContext.resume();
                     }
                     if (windOscillator) {
-                        windOscillator.gain.gain.value = 0.08;
+                        windOscillator.gain.gain.value = 0.02;
                     }
                 });
             } else {
@@ -1471,42 +1564,74 @@
 
         // ==================== MAGIC CLOUD MESSAGE ====================
         function showMagicCloud(day) {
-            // Get a random wisdom quote
-            const quote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
+            // Get the message for this day
+            const message = day === 24 ? day24Message : getMessageForDay(day);
+            
+            // Pick a random cloud image
+            const cloudImg = cloudImages[Math.floor(Math.random() * cloudImages.length)];
             
             // Create the cloud element
             const cloud = document.createElement('div');
             cloud.className = 'magic-cloud';
             cloud.innerHTML = `
-                <div class="cloud-message">
-                    "${quote.text}"
-                    <span class="cloud-source">— ${quote.source}</span>
+                <img class="cloud-image" src="${cloudImg}" alt="Cloud" onerror="this.style.display='none'">
+                <div class="cloud-text-container">
+                    <div class="cloud-book">${message.quote.book}</div>
+                    <div class="cloud-book-subtitle">from "Guidance is a Piece of God"</div>
+                    <div class="cloud-message">"${message.quote.text}"</div>
+                    <div class="cloud-oracle">${message.oracle.replace(/\n/g, '<br>')}</div>
+                    <div class="cloud-signature">~ your Thought Seer</div>
                 </div>
             `;
             
             document.body.appendChild(cloud);
             
+            // Create twinkling stars around the cloud
+            createTwinklingStars();
+            
             // Create floating particles
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const particle = document.createElement('div');
                     particle.className = 'magic-particle';
-                    particle.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
-                    particle.style.top = `${50 + (Math.random() - 0.5) * 20}%`;
+                    particle.style.left = `${50 + (Math.random() - 0.5) * 40}%`;
+                    particle.style.top = `${50 + (Math.random() - 0.5) * 30}%`;
                     particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
                     particle.style.setProperty('--ty', `${-100 - Math.random() * 100}px`);
                     document.body.appendChild(particle);
                     
                     setTimeout(() => particle.remove(), 3000);
-                }, i * 100);
+                }, i * 150);
             }
             
-            // Remove cloud after animation
+            // Remove cloud after animation (7 seconds)
             setTimeout(() => {
                 cloud.remove();
-                // Now open the modal with the daily message
-                openModal(day);
-            }, 5000);
+                // Remove stars
+                document.querySelectorAll('.twinkle-star').forEach(star => star.remove());
+            }, 7000);
+        }
+
+        // Create twinkling stars
+        function createTwinklingStars() {
+            const starCount = 30;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'twinkle-star' + (Math.random() > 0.7 ? ' large' : '');
+                
+                // Position stars around the cloud area
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 200 + Math.random() * 250;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                star.style.left = `${centerX + Math.cos(angle) * distance}px`;
+                star.style.top = `${centerY + Math.sin(angle) * distance}px`;
+                star.style.setProperty('--twinkle-duration', `${0.5 + Math.random() * 1.5}s`);
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                
+                document.body.appendChild(star);
+            }
         }
 
         // ==================== WINDOW INTERACTION ====================
@@ -1520,7 +1645,7 @@
             card.classList.add('opened');
             localStorage.setItem('advent_opened_' + day, 'true');
 
-            // Show magic cloud first, then modal
+            // Show magic cloud (no modal after)
             setTimeout(() => showMagicCloud(day), 300);
         }
 
@@ -1658,127 +1783,100 @@
                 btn.classList.add('active');
                 selectedTestDay = i;
                 
-                // Load current message for this day
-                testMessage.value = messages[i] || '';
-                
-                // Load a random quote
-                const randomQuote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
-                testQuote.value = randomQuote.text;
-                testSource.value = randomQuote.source;
+                // Load message for this day
+                const msg = i === 24 ? day24Message : getMessageForDay(i);
+                testQuote.value = msg.quote.text;
+                testSource.value = msg.quote.book;
+                testMessage.value = msg.oracle;
             });
             daySelector.appendChild(btn);
         }
 
         // Initialize with day 1
-        testMessage.value = messages[1] || '';
-        const initialQuote = wisdomQuotes[0];
-        testQuote.value = initialQuote.text;
-        testSource.value = initialQuote.source;
+        const initialMsg = getMessageForDay(1);
+        testQuote.value = initialMsg.quote.text;
+        testSource.value = initialMsg.quote.book;
+        testMessage.value = initialMsg.oracle;
 
-        // Preview cloud only
+        // Preview cloud
         document.getElementById('previewCloudBtn').addEventListener('click', () => {
-            const customQuote = {
-                text: testQuote.value || 'Your wisdom quote here...',
-                source: testSource.value || 'Laws of Dreams'
-            };
-            showMagicCloudCustom(customQuote, false);
+            showMagicCloudCustom(selectedTestDay, testQuote.value, testSource.value, testMessage.value);
         });
 
-        // Preview modal only
+        // Preview modal only - removed since we only use clouds now
         document.getElementById('previewModalBtn').addEventListener('click', () => {
-            const customMessage = testMessage.value || messages[selectedTestDay];
-            openModalCustom(selectedTestDay, customMessage);
+            showMagicCloudCustom(selectedTestDay, testQuote.value, testSource.value, testMessage.value);
         });
 
-        // Preview both (full experience)
+        // Preview both - same as cloud now
         document.getElementById('previewBothBtn').addEventListener('click', () => {
-            const customQuote = {
-                text: testQuote.value || 'Your wisdom quote here...',
-                source: testSource.value || 'Laws of Dreams'
-            };
-            const customMessage = testMessage.value || messages[selectedTestDay];
-            showMagicCloudCustom(customQuote, true, selectedTestDay, customMessage);
+            showMagicCloudCustom(selectedTestDay, testQuote.value, testSource.value, testMessage.value);
         });
 
         // Reset storage
         document.getElementById('resetStorageBtn').addEventListener('click', () => {
-            if (confirm('This will reset all opened windows. Are you sure?')) {
+            if (confirm('This will reset all opened windows and your visitor ID (messages will randomize again). Are you sure?')) {
                 for (let i = 1; i <= 24; i++) {
                     localStorage.removeItem('advent_opened_' + i);
                 }
+                localStorage.removeItem('advent_visitor_seed');
                 location.reload();
             }
         });
 
         // Custom cloud function for testing
-        function showMagicCloudCustom(quote, showModalAfter = false, day = 1, customMessage = '') {
+        function showMagicCloudCustom(day, quoteText, bookName, oracleText) {
+            const cloudImg = cloudImages[Math.floor(Math.random() * cloudImages.length)];
+            
             const cloud = document.createElement('div');
             cloud.className = 'magic-cloud';
             cloud.innerHTML = `
-                <div class="cloud-message">
-                    "${quote.text}"
-                    <span class="cloud-source">— ${quote.source}</span>
+                <img class="cloud-image" src="${cloudImg}" alt="Cloud" onerror="this.style.display='none'">
+                <div class="cloud-text-container">
+                    <div class="cloud-book">${bookName}</div>
+                    <div class="cloud-book-subtitle">from "Guidance is a Piece of God"</div>
+                    <div class="cloud-message">"${quoteText}"</div>
+                    <div class="cloud-oracle">${oracleText.replace(/\n/g, '<br>')}</div>
+                    <div class="cloud-signature">~ your Thought Seer</div>
                 </div>
             `;
             
             document.body.appendChild(cloud);
+            createTwinklingStars();
             
             // Create floating particles
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const particle = document.createElement('div');
                     particle.className = 'magic-particle';
-                    particle.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
-                    particle.style.top = `${50 + (Math.random() - 0.5) * 20}%`;
+                    particle.style.left = `${50 + (Math.random() - 0.5) * 40}%`;
+                    particle.style.top = `${50 + (Math.random() - 0.5) * 30}%`;
                     particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
                     particle.style.setProperty('--ty', `${-100 - Math.random() * 100}px`);
                     document.body.appendChild(particle);
                     
                     setTimeout(() => particle.remove(), 3000);
-                }, i * 100);
+                }, i * 150);
             }
             
             setTimeout(() => {
                 cloud.remove();
-                if (showModalAfter) {
-                    openModalCustom(day, customMessage);
-                }
-            }, 5000);
-        }
-
-        // Custom modal function for testing
-        function openModalCustom(day, customMessage) {
-            const isChristmasEve = day === 24;
-            
-            modalDay.textContent = isChristmasEve ? '🎄 Christmas Eve 🎄' : `December ${day}`;
-            modalImage.src = `${day}.jpg`;
-            modalImage.onerror = function() {
-                this.style.display = 'none';
-            };
-            modalImage.onload = function() {
-                this.style.display = 'block';
-            };
-            
-            modalMessage.innerHTML = customMessage || messages[day] || "A special message awaits...";
-            
-            if (isChristmasEve) {
-                modalMessage.classList.add('christmas-message');
-                createSparkles();
-            } else {
-                modalMessage.classList.remove('christmas-message');
-            }
-
-            modal.classList.add('show');
+                document.querySelectorAll('.twinkle-star').forEach(star => star.remove());
+            }, 7000);
         }
 
         // ==================== PRELOAD IMAGES ====================
         function preloadImages() {
+            // Preload window images
             for (let i = 1; i <= 24; i++) {
                 const img = new Image();
                 img.src = `window${i}.png`;
-                const revealImg = new Image();
-                revealImg.src = `${i}.jpg`;
             }
+            // Preload cloud images
+            cloudImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
         }
         preloadImages();
     </script>
