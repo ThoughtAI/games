@@ -862,15 +862,15 @@
         .test-panel {
             position: fixed;
             top: 0;
-            right: 0;
+            left: 0;
             width: 350px;
             height: 100vh;
             background: rgba(15, 20, 18, 0.98);
-            border-left: 2px solid #4a9078;
+            border-right: 2px solid #4a9078;
             z-index: 9998;
             overflow-y: auto;
             padding: 20px;
-            transform: translateX(100%);
+            transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
 
@@ -881,7 +881,7 @@
         .test-panel-toggle {
             position: fixed;
             top: 80px;
-            right: 20px;
+            left: 20px;
             background: rgba(74, 144, 120, 0.9);
             color: white;
             border: none;
@@ -1033,10 +1033,18 @@
     </style>
 </head>
 <body>
-    <!-- Audio Controls -->
+    <!-- 
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║  AUDIO SETUP - Upload your audio file and update the src     ║
+    ║  Supported formats: MP3, OGG, WAV                            ║
+    ║  Recommended: ambient.mp3 (or rename your file to this)      ║
+    ╚═══════════════════════════════════════════════════════════════╝
+    -->
     <audio id="ambientAudio" loop preload="auto">
+        <!-- YOUR AUDIO FILE: Change "ambient.mp3" to your filename -->
         <source src="ambient.mp3" type="audio/mpeg">
         <source src="ambient.ogg" type="audio/ogg">
+        <source src="ambient.wav" type="audio/wav">
     </audio>
 
     <!-- Background -->
@@ -1298,24 +1306,29 @@
         }
 
         audioToggle.addEventListener('click', () => {
-            if (!audioContext) {
-                initWebAudio();
-            }
-            
             isPlaying = !isPlaying;
             
             if (isPlaying) {
-                if (audioContext && audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-                if (windOscillator) {
-                    windOscillator.gain.gain.value = 0.08;
-                }
                 audioToggle.textContent = '🔊';
                 audioToggle.classList.add('playing');
                 
-                // Try to play ambient file if it exists
-                ambientAudio.play().catch(() => {});
+                // Try to play custom ambient file first
+                ambientAudio.play().then(() => {
+                    // Custom audio is playing - no need for synth sounds
+                    console.log('Playing custom audio file');
+                }).catch(() => {
+                    // No custom audio file found - use generated sounds
+                    console.log('No audio file found, using generated sounds');
+                    if (!audioContext) {
+                        initWebAudio();
+                    }
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                    if (windOscillator) {
+                        windOscillator.gain.gain.value = 0.08;
+                    }
+                });
             } else {
                 if (windOscillator) {
                     windOscillator.gain.gain.value = 0;
