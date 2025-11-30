@@ -800,105 +800,159 @@
             100% { opacity: 0; transform: translateY(-100px) scale(0); }
         }
 
-        /* DONATION SECTION */
-        .donation-section {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 40px 30px;
-            background: rgba(15, 20, 18, 0.92);
-            border-top: 1px solid rgba(74, 144, 120, 0.3);
-            border-bottom: 1px solid rgba(74, 144, 120, 0.3);
-            text-align: center;
+        /* ELEGANT NAVIGATION MENU */
+        .elegant-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        .donation-section h2 {
+        .nav-link {
+            background: rgba(15, 20, 18, 0.85);
+            border: 1px solid rgba(74, 144, 120, 0.5);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-link:hover {
+            background: rgba(74, 144, 120, 0.3);
+            border-color: #4a9078;
+            box-shadow: 0 0 15px rgba(74, 144, 120, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ABOUT MODAL */
+        .about-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .about-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .about-modal-content {
+            background: linear-gradient(145deg, #1a2520 0%, #0d1512 100%);
+            border: 2px solid #4a9078;
+            border-radius: 20px;
+            max-width: 90%;
+            width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .about-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #4a9078;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .about-close-btn:hover {
+            color: #ffffff;
+        }
+
+        .about-modal-content h2 {
             font-family: 'Cinzel', serif;
             font-size: 2rem;
             color: #ffffff;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(74, 144, 120, 0.3);
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(74, 144, 120, 0.3);
+            padding-bottom: 15px;
         }
 
-        .donation-section .heart-icon {
-            color: #e74c3c;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .donation-intro {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.8;
-            margin-bottom: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .donation-rewards {
-            background: rgba(74, 144, 120, 0.15);
-            border: 1px solid rgba(74, 144, 120, 0.4);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 35px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .donation-rewards h3 {
+        .about-modal-content h3 {
             font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #4a9078;
-            margin-bottom: 20px;
+            margin: 25px 0 15px;
         }
 
-        .reward-tier {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+        .about-body p {
             font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.8;
+            margin-bottom: 15px;
         }
 
-        .reward-tier .amount {
-            font-weight: 700;
-            color: #4a9078;
-            font-size: 1.2rem;
-        }
-
-        .reward-tier .reward {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .donation-note {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-            margin-top: 15px;
-        }
-
-        .gofundme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+        .about-contact {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
             margin-top: 30px;
-            justify-items: center;
+            flex-wrap: wrap;
         }
 
-        .gofundme-grid .gfm-embed {
-            width: 100%;
-            max-width: 350px;
+        .about-btn {
+            background: #4a9078;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .about-btn:hover {
+            background: #5db896;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(74, 144, 120, 0.4);
+        }
+
+        .about-btn.email-btn {
+            background: transparent;
+            border: 2px solid #4a9078;
+        }
+
+        .about-btn.email-btn:hover {
+            background: #4a9078;
+        }
+
+        @media (max-width: 768px) {
+            .elegant-nav {
+                top: auto;
+                bottom: 20px;
+                right: 10px;
+                left: 10px;
+                justify-content: center;
+            }
+
+            .nav-link {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
         }
 
         /* FOOTER - Elegant Dark Semi-transparent */
@@ -1295,51 +1349,37 @@
         </div>
     </div>
 
-    <!-- Donation Section -->
-    <section class="donation-section">
-        <h2><span class="heart-icon">❤️</span> Give from the Heart <span class="heart-icon">❤️</span></h2>
-        
-        <p class="donation-intro">
-            This Christmas season, spread love and light to those in need. 
-            Support these personal heart cases and make a real difference in someone's life.
-        </p>
+    <!-- Elegant Navigation Menu -->
+    <nav class="elegant-nav" id="elegantNav">
+        <a href="#about" class="nav-link" onclick="openAboutModal(event)">✨ About</a>
+        <a href="https://www.keen.com/psychic-readings/thought-seer/515437" target="_blank" class="nav-link">📞 Call / Chat Now</a>
+        <a href="donate.html" class="nav-link">🎁 Donate for Free Rewards</a>
+    </nav>
 
-        <div class="donation-rewards">
-            <h3>✨ Thank You Rewards ✨</h3>
-            <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 1rem;">
-                Send proof of your donation through Keen and receive:
-            </p>
-            <div class="reward-tier">
-                <span class="amount">€30</span>
-                <span class="reward">2 minutes free reading</span>
+    <!-- About Modal -->
+    <div class="about-modal-overlay" id="aboutModal">
+        <div class="about-modal-content">
+            <button class="about-close-btn" onclick="closeAboutModal()">✕</button>
+            <h2>About Thought Seer</h2>
+            <div class="about-body">
+                <p>Renowned for providing over 75,000 accurate international forecasts, she ensures reliability. Check out the feedback! Whether you're looking for love readings, spiritual insights, or online psychic consultations, she's here to help. Get started with a free psychic chat for quick outcomes and explore new options with confidence. 100% confidentiality guaranteed.</p>
+                
+                <h3>My Approach</h3>
+                <p>Use the chat to ask your question. Provide first name(s) and city/town(s) where you each are located.</p>
+                
+                <p>She's a true human "thought finder," specializing in love readings, spiritual insights, and psychic readings online. As a neuroscientific-coding developer, she's mastered how the brain processes information, connecting feelings to recognition of surroundings, including sight, sound, and smell. She's learned to navigate this process swiftly, utilizing changes in neuroinflammation to uncover decisions and emotions, even pinpointing locations on a map.</p>
+                
+                <p>Think of her brain as a Google search bar, delivering top hits of information about your friend's feelings, emotions, and locations. Fast, confidential, and highly accurate, she doesn't rely on archaic database storage. Instead, she uses her brain-training and software forecast development skills to detect today from a future outcome perspective.</p>
+                
+                <p>But she's also human, genuinely caring about people. She's here to provide an enjoyable and entertaining experience, viewing each day as an opportunity to learn from God's love and share it with others.</p>
+                
+                <div class="about-contact">
+                    <a href="https://www.keen.com/psychic-readings/thought-seer/515437" target="_blank" class="about-btn">📞 Call or Chat Now</a>
+                    <a href="mailto:ThoughtSpyWorldwide@gmail.com" class="about-btn email-btn">✉️ Email Me</a>
+                </div>
             </div>
-            <div class="reward-tier">
-                <span class="amount">€60</span>
-                <span class="reward">4 minutes free reading</span>
-            </div>
-            <div class="reward-tier">
-                <span class="amount">€90</span>
-                <span class="reward">5 minutes free reading + 5 days of Audio Oracles</span>
-            </div>
-            <p class="donation-note">
-                * Offer valid for donations made before December 24th, 2025<br>
-                * Free minutes are offered exclusively through the KEEN email free-minute programme, 
-                in the same sequence that all other free-minutes may be offered by advisors, 
-                including your favorite "Thought Seer"
-            </p>
         </div>
-
-        <div class="gofundme-grid">
-            <div class="gfm-embed" data-url="https://www.gofundme.com/f/emergency-support-for-greek-mountain-village-family-in-crisi/widget/small?sharesheet=undefined&attribution_id=sl:10eac9f4-b127-4e7c-9e5c-a3cf938f678b"></div>
-            
-            <div class="gfm-embed" data-url="https://www.gofundme.com/f/help-santa-find-kids-in-the-hospital/widget/small?sharesheet=undefined&attribution_id=sl:ea3852ed-66b3-442a-bb59-0c02d2d9c508"></div>
-            
-            <div class="gfm-embed" data-url="https://www.gofundme.com/f/972ca-support-dads-heart-attack-recovery/widget/small?sharesheet=undefined&attribution_id=sl:0be4ca6f-c737-4b52-82a3-62419c8e0c1a"></div>
-            
-            <div class="gfm-embed" data-url="https://www.gofundme.com/f/help-penny-recover-from-heart-attack/widget/small?sharesheet=undefined&attribution_id=sl:ee551bbd-f069-4cb5-aeea-93ca5325fae9"></div>
-        </div>
-    </section>
-    <script defer src="https://www.gofundme.com/static/js/embed.js"></script>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -2048,6 +2088,29 @@
             });
         }
         preloadImages();
+
+        // ==================== ABOUT MODAL ====================
+        function openAboutModal(event) {
+            event.preventDefault();
+            document.getElementById('aboutModal').classList.add('show');
+        }
+
+        function closeAboutModal() {
+            document.getElementById('aboutModal').classList.remove('show');
+        }
+
+        // Close about modal on outside click
+        document.getElementById('aboutModal').addEventListener('click', (e) => {
+            if (e.target.id === 'aboutModal') closeAboutModal();
+        });
+
+        // Close about modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAboutModal();
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
