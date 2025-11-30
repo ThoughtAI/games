@@ -812,6 +812,19 @@
             text-align: center;
             z-index: 9000;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            animation: bannerFadeOut 0.5s ease-out 5s forwards;
+        }
+
+        @keyframes bannerFadeOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100%);
+                pointer-events: none;
+            }
         }
 
         .announcement-banner p {
@@ -831,24 +844,9 @@
             color: #ffd700;
         }
 
-        /* Adjust nav position for banner */
-        .elegant-nav {
-            top: 80px;
-        }
-
-        /* Adjust audio toggle for banner */
-        .audio-toggle {
-            top: 70px;
-        }
-
         @media (max-width: 768px) {
             .announcement-banner p {
                 font-size: 1.1rem;
-            }
-            
-            .elegant-nav {
-                top: auto;
-                bottom: 20px;
             }
         }
 
