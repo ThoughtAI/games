@@ -48,7 +48,7 @@
             background-position: center;
             background-attachment: fixed;
             opacity: 0;
-            animation: fadeInGif 3s ease-in-out 2s forwards;
+            animation: fadeInGif 3s ease-in-out 21s forwards;
         }
 
         @keyframes fadeInGif {
@@ -800,6 +800,107 @@
             100% { opacity: 0; transform: translateY(-100px) scale(0); }
         }
 
+        /* DONATION SECTION */
+        .donation-section {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px 30px;
+            background: rgba(15, 20, 18, 0.92);
+            border-top: 1px solid rgba(74, 144, 120, 0.3);
+            border-bottom: 1px solid rgba(74, 144, 120, 0.3);
+            text-align: center;
+        }
+
+        .donation-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(74, 144, 120, 0.3);
+        }
+
+        .donation-section .heart-icon {
+            color: #e74c3c;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .donation-intro {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .donation-rewards {
+            background: rgba(74, 144, 120, 0.15);
+            border: 1px solid rgba(74, 144, 120, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .donation-rewards h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: #4a9078;
+            margin-bottom: 20px;
+        }
+
+        .reward-tier {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .reward-tier .amount {
+            font-weight: 700;
+            color: #4a9078;
+            font-size: 1.2rem;
+        }
+
+        .reward-tier .reward {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .donation-note {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        .gofundme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+            justify-items: center;
+        }
+
+        .gofundme-grid .gfm-embed {
+            width: 100%;
+            max-width: 350px;
+        }
+
         /* FOOTER - Elegant Dark Semi-transparent */
         .footer {
             position: relative;
@@ -1193,6 +1294,52 @@
             <button class="close-btn" onclick="closeModal()">Received ✨</button>
         </div>
     </div>
+
+    <!-- Donation Section -->
+    <section class="donation-section">
+        <h2><span class="heart-icon">❤️</span> Give from the Heart <span class="heart-icon">❤️</span></h2>
+        
+        <p class="donation-intro">
+            This Christmas season, spread love and light to those in need. 
+            Support these personal heart cases and make a real difference in someone's life.
+        </p>
+
+        <div class="donation-rewards">
+            <h3>✨ Thank You Rewards ✨</h3>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 1rem;">
+                Send proof of your donation through Keen and receive:
+            </p>
+            <div class="reward-tier">
+                <span class="amount">€30</span>
+                <span class="reward">2 minutes free reading</span>
+            </div>
+            <div class="reward-tier">
+                <span class="amount">€60</span>
+                <span class="reward">4 minutes free reading</span>
+            </div>
+            <div class="reward-tier">
+                <span class="amount">€90</span>
+                <span class="reward">5 minutes free reading + 5 days of Audio Oracles</span>
+            </div>
+            <p class="donation-note">
+                * Offer valid for donations made before December 24th, 2025<br>
+                * Free minutes are offered exclusively through the KEEN email free-minute programme, 
+                in the same sequence that all other free-minutes may be offered by advisors, 
+                including your favorite "Thought Seer"
+            </p>
+        </div>
+
+        <div class="gofundme-grid">
+            <div class="gfm-embed" data-url="https://www.gofundme.com/f/emergency-support-for-greek-mountain-village-family-in-crisi/widget/small?sharesheet=undefined&attribution_id=sl:10eac9f4-b127-4e7c-9e5c-a3cf938f678b"></div>
+            
+            <div class="gfm-embed" data-url="https://www.gofundme.com/f/help-santa-find-kids-in-the-hospital/widget/small?sharesheet=undefined&attribution_id=sl:ea3852ed-66b3-442a-bb59-0c02d2d9c508"></div>
+            
+            <div class="gfm-embed" data-url="https://www.gofundme.com/f/972ca-support-dads-heart-attack-recovery/widget/small?sharesheet=undefined&attribution_id=sl:0be4ca6f-c737-4b52-82a3-62419c8e0c1a"></div>
+            
+            <div class="gfm-embed" data-url="https://www.gofundme.com/f/help-penny-recover-from-heart-attack/widget/small?sharesheet=undefined&attribution_id=sl:ee551bbd-f069-4cb5-aeea-93ca5325fae9"></div>
+        </div>
+    </section>
+    <script defer src="https://www.gofundme.com/static/js/embed.js"></script>
 
     <!-- Footer -->
     <footer class="footer">
