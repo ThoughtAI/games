@@ -129,22 +129,55 @@
 
         /* CALENDAR GRID */
         .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 150px));
+            display: flex;
+            flex-wrap: wrap;
             gap: 25px;
             max-width: 1200px;
             width: 100%;
             justify-content: center;
+            align-items: center;
             padding: 20px;
+            min-height: 600px;
+            position: relative;
         }
 
         /* WINDOW CARD */
         .window-card {
             position: relative;
-            aspect-ratio: 1;
+            width: 120px;
+            height: 120px;
             cursor: pointer;
             transition: transform 0.4s ease, filter 0.3s ease;
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            /* White neon glow behind windows */
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        /* Drifting animation for regular windows */
+        .window-card.drifting {
+            animation: drift var(--drift-duration, 20s) ease-in-out infinite;
+            animation-delay: var(--drift-delay, 0s);
+        }
+
+        @keyframes drift {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(var(--drift-x1, 10px), var(--drift-y1, -8px)) rotate(1deg);
+            }
+            50% {
+                transform: translate(var(--drift-x2, -8px), var(--drift-y2, 12px)) rotate(-1deg);
+            }
+            75% {
+                transform: translate(var(--drift-x3, 12px), var(--drift-y3, 5px)) rotate(0.5deg);
+            }
+        }
+
+        .window-card.drifting:hover {
+            animation-play-state: paused;
         }
 
         .window-card:hover:not(.locked) {
@@ -154,11 +187,52 @@
 
         .window-card.locked {
             cursor: not-allowed;
-            filter: grayscale(0.6) brightness(0.5) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+            filter: brightness(0.7) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        /* Different neon hues for locked windows */
+        .window-card.locked.hue-green {
+            filter: brightness(0.7) hue-rotate(0deg) drop-shadow(0 0 15px rgba(100, 255, 150, 0.3));
+        }
+        .window-card.locked.hue-green .window-image {
+            border-color: rgba(100, 255, 150, 0.5);
+            box-shadow: 0 0 20px rgba(100, 255, 150, 0.3), 0 0 40px rgba(100, 255, 150, 0.1);
+        }
+
+        .window-card.locked.hue-blue {
+            filter: brightness(0.7) drop-shadow(0 0 15px rgba(100, 180, 255, 0.3));
+        }
+        .window-card.locked.hue-blue .window-image {
+            border-color: rgba(100, 180, 255, 0.5);
+            box-shadow: 0 0 20px rgba(100, 180, 255, 0.3), 0 0 40px rgba(100, 180, 255, 0.1);
+        }
+
+        .window-card.locked.hue-red {
+            filter: brightness(0.7) drop-shadow(0 0 15px rgba(255, 120, 120, 0.3));
+        }
+        .window-card.locked.hue-red .window-image {
+            border-color: rgba(255, 120, 120, 0.5);
+            box-shadow: 0 0 20px rgba(255, 120, 120, 0.3), 0 0 40px rgba(255, 120, 120, 0.1);
+        }
+
+        .window-card.locked.hue-purple {
+            filter: brightness(0.7) drop-shadow(0 0 15px rgba(180, 130, 255, 0.3));
+        }
+        .window-card.locked.hue-purple .window-image {
+            border-color: rgba(180, 130, 255, 0.5);
+            box-shadow: 0 0 20px rgba(180, 130, 255, 0.3), 0 0 40px rgba(180, 130, 255, 0.1);
+        }
+
+        .window-card.locked.hue-cyan {
+            filter: brightness(0.7) drop-shadow(0 0 15px rgba(100, 255, 255, 0.3));
+        }
+        .window-card.locked.hue-cyan .window-image {
+            border-color: rgba(100, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(100, 255, 255, 0.3), 0 0 40px rgba(100, 255, 255, 0.1);
         }
 
         .window-card.locked:hover {
-            filter: grayscale(0.4) brightness(0.6) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+            filter: brightness(0.8) drop-shadow(0 5px 15px rgba(255, 255, 255, 0.2));
         }
 
         /* Window Image */
@@ -169,6 +243,8 @@
             border-radius: 8px;
             border: 3px solid #4a9078;
             box-shadow: 
+                0 0 15px rgba(255, 255, 255, 0.4),
+                0 0 30px rgba(255, 255, 255, 0.2),
                 inset 0 0 20px rgba(255, 255, 255, 0.2),
                 0 0 10px rgba(74, 144, 120, 0.3);
         }
@@ -181,24 +257,32 @@
             0%, 100% { 
                 filter: brightness(1) saturate(1);
                 box-shadow: 
+                    0 0 15px rgba(255, 255, 255, 0.4),
+                    0 0 30px rgba(255, 255, 255, 0.2),
                     inset 0 0 20px rgba(255, 255, 255, 0.2),
                     0 0 10px rgba(74, 144, 120, 0.3);
             }
             25% { 
-                filter: brightness(1.1) saturate(1.1);
+                filter: brightness(1.15) saturate(1.1);
                 box-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.6),
+                    0 0 40px rgba(255, 255, 255, 0.3),
                     inset 0 0 25px rgba(255, 255, 255, 0.4),
                     0 0 15px rgba(74, 144, 120, 0.5);
             }
             50% { 
                 filter: brightness(0.95) saturate(0.95);
                 box-shadow: 
+                    0 0 12px rgba(255, 255, 255, 0.3),
+                    0 0 25px rgba(255, 255, 255, 0.15),
                     inset 0 0 18px rgba(255, 255, 255, 0.15),
                     0 0 8px rgba(74, 144, 120, 0.2);
             }
             75% { 
-                filter: brightness(1.05) saturate(1.05);
+                filter: brightness(1.1) saturate(1.05);
                 box-shadow: 
+                    0 0 18px rgba(255, 255, 255, 0.5),
+                    0 0 35px rgba(255, 255, 255, 0.25),
                     inset 0 0 22px rgba(255, 255, 255, 0.3),
                     0 0 12px rgba(74, 144, 120, 0.4);
             }
@@ -224,6 +308,28 @@
                 0 2px 8px rgba(0, 0, 0, 0.5),
                 inset 0 1px 2px rgba(255, 255, 255, 0.5);
             border: 2px solid rgba(74, 144, 120, 0.5);
+        }
+
+        /* Pulsing candle glow on unlocked day numbers */
+        .window-card:not(.locked) .day-number {
+            animation: candlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes candlePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 2px 8px rgba(0, 0, 0, 0.5),
+                    0 0 10px rgba(255, 200, 100, 0.4),
+                    0 0 20px rgba(255, 150, 50, 0.2);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 
+                    0 2px 8px rgba(0, 0, 0, 0.5),
+                    0 0 15px rgba(255, 200, 100, 0.7),
+                    0 0 30px rgba(255, 150, 50, 0.4);
+                transform: scale(1.05);
+            }
         }
 
         .window-card.locked .day-number {
@@ -272,10 +378,59 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
         }
 
-        /* SPECIAL DAY 24 */
+        /* SPECIAL DAY 24 - Centered with Wreath */
+        .day-24-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0;
+            order: -1; /* Always first/top */
+        }
+
         .window-card.day-24 {
-            grid-column: span 2;
-            grid-row: span 2;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            /* No drifting for day 24 */
+            animation: none !important;
+            transform: none !important;
+        }
+
+        /* Christmas Wreath Border */
+        .window-card.day-24::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(ellipse at center, transparent 60%, rgba(34, 80, 50, 0.8) 65%, rgba(50, 120, 70, 0.9) 70%, rgba(34, 80, 50, 0.8) 75%, transparent 80%);
+            z-index: -1;
+            animation: wreathGlow 3s ease-in-out infinite;
+        }
+
+        /* Wreath decorations - berries */
+        .window-card.day-24::after {
+            content: '🎄✨🎁✨🎄';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes wreathGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(50, 150, 80, 0.5)) drop-shadow(0 0 20px rgba(255, 50, 50, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(50, 150, 80, 0.8)) drop-shadow(0 0 30px rgba(255, 50, 50, 0.5));
+            }
         }
 
         .window-card.day-24 .day-number {
@@ -501,13 +656,21 @@
         /* Responsive */
         @media (max-width: 768px) {
             .calendar-grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
                 gap: 15px;
             }
 
+            .window-card {
+                width: 100px;
+                height: 100px;
+            }
+
             .window-card.day-24 {
-                grid-column: span 2;
-                grid-row: span 1;
+                width: 160px;
+                height: 160px;
+            }
+
+            .day-24-container {
+                padding: 20px 0;
             }
 
             .modal-content {
@@ -648,6 +811,12 @@
 
         // ==================== CALENDAR CREATION ====================
         const calendarGrid = document.getElementById('calendarGrid');
+        const hueClasses = ['hue-green', 'hue-blue', 'hue-red', 'hue-purple', 'hue-cyan'];
+
+        // Create Day 24 container first (centered at top)
+        const day24Container = document.createElement('div');
+        day24Container.className = 'day-24-container';
+        calendarGrid.appendChild(day24Container);
 
         // Create windows 1-24
         for (let day = 1; day <= 24; day++) {
@@ -664,20 +833,65 @@
             // Check if this day is locked
             if (!isDayUnlocked(day)) {
                 card.classList.add('locked');
+                // Add random hue class for locked windows
+                const randomHue = hueClasses[Math.floor(Math.random() * hueClasses.length)];
+                card.classList.add(randomHue);
+            }
+
+            // Add drifting animation to non-Day-24 windows
+            if (day !== 24) {
+                card.classList.add('drifting');
+                // Randomize drift parameters based on time of day
+                const timeOffset = (new Date().getHours() * 60 + new Date().getMinutes()) / 1440; // 0-1 based on time
+                const dayOffset = day / 24;
+                
+                card.style.setProperty('--drift-duration', `${15 + Math.random() * 15}s`);
+                card.style.setProperty('--drift-delay', `${-Math.random() * 20}s`);
+                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 12).toFixed(1)}px`);
+                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -12).toFixed(1)}px`);
+                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 10).toFixed(1)}px`);
+                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -8).toFixed(1)}px`);
             }
 
             card.innerHTML = `
                 <img class="window-image" 
-                     src="window${day}.png" 
+                     src="${day === 24 ? 'window24closed.png' : 'window' + day + '.png'}" 
                      alt="Day ${day}"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23222%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 fill=%22%23d4af37%22 text-anchor=%22middle%22 font-size=%2224%22>${day}</text></svg>'">
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23222%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 fill=%22%234a9078%22 text-anchor=%22middle%22 font-size=%2224%22>${day}</text></svg>'">
                 <div class="day-number">${day}</div>
                 <div class="lock-icon">🔒</div>
             `;
 
             card.addEventListener('click', () => handleWindowClick(day, card));
-            calendarGrid.appendChild(card);
+            
+            // Day 24 goes in its special container, others in the grid
+            if (day === 24) {
+                day24Container.appendChild(card);
+            } else {
+                calendarGrid.appendChild(card);
+            }
         }
+
+        // Update drift positions periodically based on time
+        function updateDriftPositions() {
+            const cards = document.querySelectorAll('.window-card.drifting');
+            const timeOffset = (new Date().getHours() * 60 + new Date().getMinutes()) / 1440;
+            
+            cards.forEach((card, index) => {
+                const dayOffset = (index + 1) / 24;
+                card.style.setProperty('--drift-x1', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 10) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-y1', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 8) * 12).toFixed(1)}px`);
+                card.style.setProperty('--drift-x2', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 12 + 2) * -12).toFixed(1)}px`);
+                card.style.setProperty('--drift-y2', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 6 + 1) * 15).toFixed(1)}px`);
+                card.style.setProperty('--drift-x3', `${(Math.sin(timeOffset * Math.PI * 2 + dayOffset * 14 + 4) * 10).toFixed(1)}px`);
+                card.style.setProperty('--drift-y3', `${(Math.cos(timeOffset * Math.PI * 2 + dayOffset * 10 + 3) * -8).toFixed(1)}px`);
+            });
+        }
+
+        // Update positions every 5 minutes
+        setInterval(updateDriftPositions, 5 * 60 * 1000);
 
         // ==================== DATE CHECKING ====================
         function isDayUnlocked(day) {
