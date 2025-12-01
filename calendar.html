@@ -800,55 +800,6 @@
             100% { opacity: 0; transform: translateY(-100px) scale(0); }
         }
 
-        /* ANNOUNCEMENT BANNER */
-        .announcement-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(135deg, #1a3d2e 0%, #0d1f18 100%);
-            border-bottom: 2px solid #4a9078;
-            padding: 15px 20px;
-            text-align: center;
-            z-index: 9000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            animation: bannerFadeOut 0.5s ease-out 5s forwards;
-        }
-
-        @keyframes bannerFadeOut {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100%);
-                pointer-events: none;
-            }
-        }
-
-        .announcement-banner p {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            color: #ffffff;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .announcement-banner .highlight {
-            color: #4a9078;
-            font-weight: 700;
-        }
-
-        .announcement-banner .sparkle {
-            color: #ffd700;
-        }
-
-        @media (max-width: 768px) {
-            .announcement-banner p {
-                font-size: 1.1rem;
-            }
-        }
 
         /* ELEGANT NAVIGATION MENU */
         .elegant-nav {
@@ -1311,10 +1262,7 @@
     </style>
 </head>
 <body>
-    <!-- Announcement Banner -->
-    <div class="announcement-banner">
-        <p><span class="sparkle">✨</span> The magic begins <span class="highlight">tomorrow, December 1st!</span> Return each day to unlock your special message. <span class="sparkle">✨</span></p>
-    </div>
+
     <!-- 
     ╔═══════════════════════════════════════════════════════════════╗
     ║  AUDIO SETUP - Upload your audio file and update the src     ║
