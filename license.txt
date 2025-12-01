@@ -1,0 +1,27 @@
+© 2025 ThoughtSeer. All Rights Reserved.
+
+PROPRIETARY LICENSE
+
+This repository and all its contents, including but not limited to code, 
+images, audio files, designs, and documentation, are the exclusive 
+intellectual property of ThoughtSeer.
+
+NO PERMISSION IS GRANTED TO:
+- Copy, reproduce, or duplicate any part of this repository
+- Modify, adapt, or create derivative works
+- Distribute, publish, or share any contents
+- Use for commercial or non-commercial purposes
+- Reverse engineer or extract any assets
+
+VIEWING ONLY:
+This code is visible for transparency purposes only. Visibility does 
+not imply permission to use.
+
+LICENSED COPIES:
+Authorized template licenses may be purchased directly from ThoughtSeer.
+Contact via Keen: keen.com/psychic-readings/thought-seer/515437
+
+VIOLATIONS:
+Unauthorized use will result in DMCA takedown notices and legal action.
+
+All rights reserved.
